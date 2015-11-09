@@ -1,0 +1,34 @@
+{
+  "name": "kv-keeper",
+  "version": "1.0.0",
+  "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
+  "main": "lib/kv-storage.js",
+  "scripts": {
+    "deps": "npm install && bower install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "pre-commit": [
+    "eslint .",
+    "jscs ."
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andre487/kv-keeper.js.git"
+  },
+  "keywords": [
+    "localstorage",
+    "indexeddb",
+    "key-value"
+  ],
+  "author": "Andrey Prokopyuk <andrey.prokopyuk@gmail.com> (http://andre.life)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andre487/kv-keeper.js/issues"
+  },
+  "homepage": "https://github.com/andre487/kv-keeper.js#readme",
+  "devDependencies": {
+    "bower": "^1.6.5",
+    "eslint": "^1.9.0",
+    "jscs": "^2.5.1"
+  }
+}
