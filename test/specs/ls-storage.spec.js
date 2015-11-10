@@ -20,31 +20,19 @@ describe('KvKeeper.StorageLS', function () {
         KvKeeper.getStorage('ls', function (err, storage) {
             storage.setItem('foo', 'bar', function (err) {
                 assert.isNull(err);
-                assert.equal(localStorage.getItem('foo'), '"bar"');
+                assert.equal(localStorage.getItem('foo'), 'bar');
                 done();
             });
         });
     });
 
-    it('should get items from LS when it is a correct JSON', function (done) {
-        localStorage.setItem('foo', '"bar"');
+    it('should get items from LS', function (done) {
+        localStorage.setItem('foo', 'bar');
 
         KvKeeper.getStorage('ls', function (err, storage) {
             storage.getItem('foo', function (err, val) {
                 assert.isNull(err);
                 assert.equal(val, 'bar');
-                done();
-            });
-        });
-    });
-
-    it('should provide error when value is LS is not a correct JSON', function (done) {
-        localStorage.setItem('foo', 'bar');
-
-        KvKeeper.getStorage('ls', function (err, storage) {
-            storage.getItem('foo', function (err, val) {
-                assert.instanceOf(err, Error);
-                assert.include(err.toString(), 'SyntaxError: Unexpected token');
                 done();
             });
         });
