@@ -48,7 +48,7 @@ if [[ "$git_cached_js" ]]; then
         echo -e "$SEPARATOR"
     fi
 
-    "$npm_bin_dir/jscs" ${git_cached_js} --config "$project_dir/.jscs.json"
+    "$npm_bin_dir/jscs" ${git_cached_js} --config "$project_dir/.jscsrc"
     if [[ $? != 0 ]]; then
         error=1
         jscs_st=1

@@ -7,7 +7,7 @@ describe('KvKeeper.StorageLS', function () {
         KvKeeper._clearInstance('ls');
         localStorage.clear();
     });
-    
+
     it('should work on supported platform', function (done) {
         KvKeeper.getStorage('ls', function (err, storage) {
             assert.isNull(err);
@@ -73,7 +73,7 @@ describe('KvKeeper.StorageLS', function () {
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.removeItem('foo', function (err) {
                     assert.isNull(err);
-                    assert.isUndefined(localStorage['foo']);
+                    assert.isUndefined(localStorage.getItem('foo'));
                     done();
                 });
             });
