@@ -73,7 +73,7 @@ describe('KvKeeper.StorageLS', function () {
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.removeItem('foo', function (err) {
                     assert.isNull(err);
-                    assert.isUndefined(localStorage.getItem('foo'));
+                    assert.notOk(localStorage.getItem('foo'));
                     done();
                 });
             });
