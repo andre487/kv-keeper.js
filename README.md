@@ -1,4 +1,6 @@
 # kv-keeper.js
+**WORK IN PROGRESS**
+
 Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage
 
   * Very light
