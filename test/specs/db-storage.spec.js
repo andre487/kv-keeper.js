@@ -1,4 +1,10 @@
-var describer = window.indexedDB ? describe : describe.skip;
+var describer;
+if (window.indexedDB) {
+    describer = describe;
+} else {
+    describer = describe.skip;
+    console.log('IndexedDB is not supported on this platform'); // eslint-disable-line no-console
+}
 
 describer('KvKeeper.StorageDB', function () {
     var secondDb;
