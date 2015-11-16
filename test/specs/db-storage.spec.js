@@ -62,6 +62,65 @@ describer('KvKeeper.StorageDB', function () {
         });
     });
 
+    describe('#hasItem()', function () {
+        it('should provide true for existing in DB item', function (done) {
+            getStore().add({key: 'foo', value: false}).onsuccess = function () {
+                KvKeeper.getStorage('db', function (err, storage) {
+                    storage.hasItem('foo', function (err, has) {
+                        assert.isNull(err);
+                        assert.isTrue(has);
+                        done();
+                    });
+                });
+            };
+        });
+
+        it('should provide false for absent item', function (done) {
+            KvKeeper.getStorage('db', function (err, storage) {
+                storage.hasItem('foo', function (err, has) {
+                    assert.isNull(err);
+                    assert.isFalse(has);
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('#removeItem()', function () {
+        it('should remove items from DB', function (done) {
+            getStore().add({key: 'foo', value: 'bar'}).onsuccess = function () {
+                KvKeeper.getStorage('db', function (err, storage) {
+                    checkHas();
+
+                    function checkHas() {
+                        storage.hasItem('foo', function (err, has) {
+                            assert.isNull(err);
+                            assert.isTrue(has);
+
+                            remove();
+                        });
+                    }
+
+                    function remove() {
+                        storage.removeItem('foo', function (err) {
+                            assert.isNull(err);
+
+                            checkHasNot();
+                        });
+                    }
+
+                    function checkHasNot() {
+                        storage.hasItem('foo', function (err, has) {
+                            assert.isNull(err);
+                            assert.isFalse(has);
+                            done();
+                        });
+                    }
+                });
+            };
+        });
+    });
+
     function connectToDb(done) {
         var req = window.indexedDB.open(KvKeeper.DB_NAME, KvKeeper.DB_VERSION);
 
