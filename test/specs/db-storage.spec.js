@@ -165,6 +165,37 @@ describer('KvKeeper.StorageDB', function () {
         });
     });
 
+    describe('#clear()', function () {
+        it('should remove all items from store', function (done) {
+            insert(clear.bind(this, check));
+
+            function insert(callback) {
+                getStore().add({key: 'foo', value: 'baz'}).onsuccess = function () {
+                    getStore().add({key: 'bar', value: 'qux'}).onsuccess = callback;
+                };
+            }
+
+            function clear(callback) {
+                KvKeeper.getStorage('db', function (err, storage) {
+                    storage.clear(function (err) {
+                        assert.isNull(err);
+                        callback();
+                    });
+                });
+            }
+
+            function check() {
+                KvKeeper.getStorage('db', function (err, storage) {
+                    storage.getLength(function (err, length) {
+                        assert.isNull(err);
+                        assert.equal(length, 0);
+                        done();
+                    });
+                });
+            }
+        });
+    });
+
     function connectToDb(done) {
         var req = window.indexedDB.open(KvKeeper.DB_NAME, KvKeeper.DB_VERSION);
 
