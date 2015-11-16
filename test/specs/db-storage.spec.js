@@ -143,6 +143,28 @@ describer('KvKeeper.StorageDB', function () {
         });
     });
 
+    describe('#getLength()', function () {
+        it('should count of items in DB', function (done) {
+            insert(check);
+
+            function insert(callback) {
+                getStore().add({key: 'foo', value: 'baz'}).onsuccess = function () {
+                    getStore().add({key: 'bar', value: 'qux'}).onsuccess = callback;
+                };
+            }
+
+            function check() {
+                KvKeeper.getStorage('db', function (err, storage) {
+                    storage.getLength(function (err, length) {
+                        assert.isNull(err);
+                        assert.equal(length, 2);
+                        done();
+                    });
+                });
+            }
+        });
+    });
+
     function connectToDb(done) {
         var req = window.indexedDB.open(KvKeeper.DB_NAME, KvKeeper.DB_VERSION);
 
