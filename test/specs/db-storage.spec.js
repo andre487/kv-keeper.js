@@ -48,6 +48,20 @@ describer('KvKeeper.StorageDB', function () {
         });
     });
 
+    describe('#getItem()', function () {
+        it('should get items from DB', function (done) {
+            getStore().add({key: 'foo', value: 'bar'}).onsuccess = function () {
+                KvKeeper.getStorage('db', function (err, storage) {
+                    storage.getItem('foo', function (err, val) {
+                        assert.isNull(err);
+                        assert.equal(val, 'bar');
+                        done();
+                    });
+                });
+            };
+        });
+    });
+
     function connectToDb(done) {
         var req = window.indexedDB.open(KvKeeper.DB_NAME, KvKeeper.DB_VERSION);
 
