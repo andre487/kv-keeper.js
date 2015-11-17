@@ -253,7 +253,11 @@ describer('KvKeeper.StorageDB on negative', function () {
         instance = new KvKeeper.StorageDB(indexedDBStub);
     });
 
-    describe.only('when init', function () {
+    afterEach(function () {
+        sandbox.restore();
+    });
+
+    describe('when init', function () {
         it('should provide error from callback', function (done) {
             var errEvent = new DbEventStub();
 
@@ -279,6 +283,23 @@ describer('KvKeeper.StorageDB on negative', function () {
                 assert.instanceOf(err, Error);
                 assert.include(err.toString(), '[kv-keeper] DB is blocked');
                 assert.propertyVal(err, 'event', errEvent);
+
+                done();
+            });
+        });
+    });
+
+    describe('when upgrade', function () {
+        it('should provide constraint error', function (done) {
+            var thrownError = new Error('ConstraintError');
+
+            sandbox.stub(IDBOpenDBRequestStub.prototype, 'applyDefault',
+                function () { this.onupgradeneeded(new DbEventStub()); });
+
+            sandbox.stub(KvKeeper.StorageDB, 'setupSchema').throws(thrownError);
+
+            instance.ensureReady(function (err) {
+                assert.equal(err, thrownError);
 
                 done();
             });
