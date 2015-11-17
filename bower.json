@@ -21,9 +21,9 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/*.*",
-    "!./lib",
-    "!./dist"
+    "**/.*",
+    "package.json",
+    "test"
   ],
   "devDependencies": {
     "chai": "~3.4.1",
