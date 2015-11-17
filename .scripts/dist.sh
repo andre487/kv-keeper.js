@@ -7,7 +7,7 @@ cd "$dir/.."
 uglifyjs lib/kv-keeper.js --output dist/kv-keeper.min.js \
     --source-map=dist/kv-keeper.map \
     --source-map-url=kv-keeper.map \
-    --preamble="// KvKeeper by andre487" \
+    --preamble="// Key-Value Keeper by andre487, see https://clck.ru/9cB92" \
     --mangle \
     --screw-ie8 \
     --name-cache \
