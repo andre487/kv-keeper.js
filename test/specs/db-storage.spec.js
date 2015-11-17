@@ -6,7 +6,7 @@ if (window.indexedDB) {
     console.log('IndexedDB is not supported on this platform'); // eslint-disable-line no-console
 }
 
-describer('KvKeeper.StorageDB', function () {
+describer('KvKeeper.StorageDB on positive', function () {
     var secondDb;
 
     beforeEach(function (done) {
@@ -242,4 +242,46 @@ describer('KvKeeper.StorageDB', function () {
     function getStore() {
         return secondDb.transaction([KvKeeper.STORE_NAME], 'readwrite').objectStore(KvKeeper.STORE_NAME);
     }
+});
+
+describer('KvKeeper.StorageDB on negative', function () {
+    var sandbox;
+    var instance;
+
+    beforeEach(function () {
+        sandbox = sinon.sandbox.create();
+        instance = new KvKeeper.StorageDB(indexedDBStub);
+    });
+
+    describe.only('when init', function () {
+        it('should provide error from callback', function (done) {
+            var errEvent = new DbEventStub();
+
+            sandbox.stub(IDBOpenDBRequestStub.prototype, 'applyDefault',
+                function () { this.onerror(errEvent); });
+
+            instance.ensureReady(function (err) {
+                assert.instanceOf(err, Error);
+                assert.include(err.toString(), '[kv-keeper] DB request error');
+                assert.propertyVal(err, 'event', errEvent);
+
+                done();
+            });
+        });
+
+        it('should provide blocking error', function (done) {
+            var errEvent = new DbEventStub();
+
+            sandbox.stub(IDBOpenDBRequestStub.prototype, 'applyDefault',
+                function () { this.onblocked(errEvent); });
+
+            instance.ensureReady(function (err) {
+                assert.instanceOf(err, Error);
+                assert.include(err.toString(), '[kv-keeper] DB is blocked');
+                assert.propertyVal(err, 'event', errEvent);
+
+                done();
+            });
+        });
+    });
 });
