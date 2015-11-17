@@ -18,7 +18,8 @@
   "license": "MIT",
   "ignore": [
     "**/*.*",
-    "!./lib/kv-keeper.js"
+    "!./lib",
+    "!./dist"
   ],
   "devDependencies": {
     "chai": "~3.4.1",

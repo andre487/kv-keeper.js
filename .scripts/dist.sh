@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -ex
+
+dir=$(cd `dirname $0` && pwd)
+cd "$dir/.."
+
+uglifyjs lib/kv-keeper.js --output dist/kv-keeper.min.js \
+    --source-map=dist/kv-keeper.map \
+    --source-map-url=kv-keeper.map \
+    --preamble="// KvKeeper by andre487" \
+    --mangle \
+    --screw-ie8 \
+    --name-cache \
+    --pure-funcs \
+    --globals=KvKeeper \
+    --wrap=KvKeeper \
+    --verbose

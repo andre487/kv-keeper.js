@@ -5,6 +5,7 @@
   "main": "lib/kv-storage.js",
   "scripts": {
     "deps": "npm install && bower install",
+    "dist": ".scripts/dist.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "pre-commit": [
@@ -30,6 +31,7 @@
     "bower": "^1.6.5",
     "eslint": "^1.9.0",
     "git-hooks": "^1.0.2",
-    "jscs": "^2.5.1"
+    "jscs": "^2.5.1",
+    "uglify-js": "^2.6.1"
   }
 }
