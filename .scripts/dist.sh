@@ -15,3 +15,8 @@ uglifyjs lib/kv-keeper.js --output dist/kv-keeper.min.js \
     --globals=KvKeeper \
     --wrap=KvKeeper \
     --verbose
+
+cd dist
+gzip -7 -c kv-keeper.min.js > kv-keeper.min.js.gz
+
+ls -lh
