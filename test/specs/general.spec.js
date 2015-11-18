@@ -5,8 +5,16 @@ describe('KvKeeper.getStorage()', function () {
         sandbox = sinon.sandbox.create();
     });
 
-    afterEach(function () {
+    afterEach(function (done) {
         sandbox.restore();
+
+        KvKeeper.getStorage(function (err, storage) {
+            if (err) {
+                return done(err);
+            }
+            storage.close();
+            done();
+        });
     });
 
     it('should be presented', function () {
@@ -15,7 +23,7 @@ describe('KvKeeper.getStorage()', function () {
 
     it('should call back with storage if supported', function (done) {
         var fakeStorage = {
-            ensureReady: sinon.stub().callsArgWith(0, null, 'StorageInstance')
+            init: sinon.stub().callsArgWith(0, null, 'StorageInstance')
         };
         sandbox.stub(KvKeeper, '_getInstance').returns(fakeStorage);
 
