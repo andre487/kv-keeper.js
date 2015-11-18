@@ -4,7 +4,6 @@ describe('KvKeeper.StorageLS', function () {
     });
 
     afterEach(function () {
-        KvKeeper._clearInstance('ls');
         localStorage.clear();
     });
 

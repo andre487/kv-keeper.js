@@ -74,8 +74,6 @@ function testDbOnPositive(label, resetDb) {
                 storage.close();
                 secondDb.close();
 
-                KvKeeper._clearInstance('db');
-
                 resetDb(done);
             });
         });
