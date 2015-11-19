@@ -4,17 +4,19 @@ set -e
 dir=$(cd `dirname $0` && pwd)
 cd "$dir/.."
 
-uglifyjs lib/kv-keeper.js --output dist/kv-keeper.min.js \
+sed "s/'use strict';//" lib/kv-keeper.js > dist/kv-keeper.work.js
+
+uglifyjs dist/kv-keeper.work.js --output dist/kv-keeper.min.js \
     --source-map=dist/kv-keeper.map \
     --source-map-url=kv-keeper.map \
     --preamble="// Key-Value Keeper by andre487, see https://clck.ru/9cB92" \
-    --mangle \
+    --mangle="sort=true" \
+    --compress \
     --screw-ie8 \
-    --name-cache \
     --pure-funcs \
-    --globals=KvKeeper \
-    --wrap=KvKeeper \
     --verbose
+
+rm -f dist/kv-keeper.work.js
 
 cd dist
 gzip -7 -c kv-keeper.min.js > kv-keeper.min.js.gz
