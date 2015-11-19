@@ -6,6 +6,9 @@
     "KvKeeper": false,
     "assert": false,
     "chai": false,
-    "sinon": false
+    "sinon": false,
+    "indexedDBStub": false,
+    "DbEventStub": false,
+    "IDBOpenDBRequestStub": false
   }
 }

@@ -6,7 +6,11 @@
     "andre487 <andrey.prokopyuk@gmail.com>"
   ],
   "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
-  "main": "lib/kv-keeper.js",
+  "main": [
+    "lib/kv-keeper.js",
+    "dist/kv-keeper.min.js",
+    "dist/kv-keeper.map"
+  ],
   "moduleType": [
     "node"
   ],
@@ -18,15 +22,12 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "package.json",
+    "test"
   ],
   "devDependencies": {
-    "mocha": "~2.3.3",
     "chai": "~3.4.1",
-    "sinon-1.17.2": "http://sinonjs.org/releases/sinon-1.17.2.js",
-    "async": "~1.5.0"
+    "mocha": "~2.3.3",
+    "sinon-1.17.2": "http://sinonjs.org/releases/sinon-1.17.2.js"
   }
 }
