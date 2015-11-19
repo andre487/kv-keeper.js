@@ -13,7 +13,6 @@ uglifyjs dist/kv-keeper.work.js --output dist/kv-keeper.min.js \
     --mangle="sort=true" \
     --compress \
     --screw-ie8 \
-    --pure-funcs \
     --verbose
 
 rm -f dist/kv-keeper.work.js
