@@ -7,6 +7,8 @@ describe('KvKeeper.StorageLS', function () {
         localStorage.clear();
     });
 
+    var key = KvKeeper.StorageLS.createKey;
+
     it('should work on supported platform', function (done) {
         KvKeeper.getStorage('ls', function (err, storage) {
             assert.isNull(err);
@@ -20,7 +22,7 @@ describe('KvKeeper.StorageLS', function () {
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.setItem('foo', 'bar', function (err) {
                     assert.isNull(err);
-                    assert.equal(localStorage.getItem('foo'), 'bar');
+                    assert.equal(localStorage.getItem(key('foo')), 'bar');
                     done();
                 });
             });
@@ -29,7 +31,7 @@ describe('KvKeeper.StorageLS', function () {
 
     describe('#getItem()', function () {
         it('should get items from LS', function (done) {
-            localStorage.setItem('foo', 'bar');
+            localStorage.setItem(key('foo'), 'bar');
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.getItem('foo', function (err, val) {
@@ -43,7 +45,7 @@ describe('KvKeeper.StorageLS', function () {
 
     describe('#hasItem()', function () {
         it('should provide true for existing in LS item', function (done) {
-            localStorage.setItem('foo', false);
+            localStorage.setItem(key('foo'), false);
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.hasItem('foo', function (err, has) {
@@ -67,7 +69,7 @@ describe('KvKeeper.StorageLS', function () {
 
     describe('#removeItem()', function () {
         it('should remove items from LS', function (done) {
-            localStorage.setItem('foo', 'bar');
+            localStorage.setItem(key('foo'), 'bar');
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.removeItem('foo', function (err) {
@@ -81,13 +83,13 @@ describe('KvKeeper.StorageLS', function () {
 
     describe('#getKeys()', function () {
         it('should get items keys from LS', function (done) {
-            localStorage.setItem('foo', 'bar');
-            localStorage.setItem('baz', 'qux');
+            localStorage.setItem(key('foo'), 'bar');
+            localStorage.setItem(key('baz'), 'qux');
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.getKeys(function (err, keys) {
                     assert.isNull(err);
-                    assert.sameMembers(['baz', 'foo'], keys);
+                    assert.sameMembers([key('baz'), key('foo')], keys);
                     done();
                 });
             });
@@ -96,8 +98,8 @@ describe('KvKeeper.StorageLS', function () {
 
     describe('#getLength()', function () {
         it('should length of LS', function (done) {
-            localStorage.setItem('foo', 'bar');
-            localStorage.setItem('baz', 'qux');
+            localStorage.setItem(key('foo'), 'bar');
+            localStorage.setItem(key('baz'), 'qux');
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.getLength(function (err, length) {
@@ -111,8 +113,8 @@ describe('KvKeeper.StorageLS', function () {
 
     describe('#clear()', function () {
         it('should clear LS', function (done) {
-            localStorage.setItem('foo', 'bar');
-            localStorage.setItem('baz', 'qux');
+            localStorage.setItem(key('foo'), 'bar');
+            localStorage.setItem(key('baz'), 'qux');
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.clear(function (err) {
