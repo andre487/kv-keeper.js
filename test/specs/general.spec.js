@@ -118,3 +118,50 @@ describe('KvKeeper general methods', function () {
         });
     });
 });
+
+describe('KvKeeper.configure()', function () {
+    var backup = {};
+
+    beforeEach(function () {
+        backup.dbName = KvKeeper.dbName;
+        backup.storeName = KvKeeper.storeName;
+        backup.namespace = KvKeeper.namespace;
+    });
+
+    afterEach(function () {
+        KvKeeper.dbName = backup.dbName;
+        KvKeeper.storeName = backup.storeName;
+        KvKeeper.namespace = backup.namespace;
+        KvKeeper.__configured = null;
+    });
+
+    it('should set up correct options', function () {
+        KvKeeper.configure({dbName: 'foo', storeName: 'bar'});
+
+        assert.equal(KvKeeper.dbName, 'foo');
+        assert.equal(KvKeeper.storeName, 'bar');
+        assert.equal(KvKeeper.namespace, 'foo:bar:');
+    });
+
+    it('should throw error when you trying to set incorrect option', function () {
+        assert.throws(function () {
+            KvKeeper.configure({dbName: 'foo', storeNames: 'bars'});
+        }, 'Option storeNames is not configurable');
+
+        assert.equal(KvKeeper.dbName, 'kv-keeper-items');
+        assert.equal(KvKeeper.storeName, 'items');
+        assert.equal(KvKeeper.namespace, 'kv-keeper-items:items:');
+    });
+
+    it('should throw error when called more than once', function () {
+        KvKeeper.configure({dbName: 'foo1', storeName: 'bar1'});
+
+        assert.throws(function () {
+            KvKeeper.configure({dbName: 'foo2', storeName: 'bar2'});
+        }, 'Configuration can be set only once');
+
+        assert.equal(KvKeeper.dbName, 'foo1');
+        assert.equal(KvKeeper.storeName, 'bar1');
+        assert.equal(KvKeeper.namespace, 'foo1:bar1:');
+    });
+});

@@ -8,7 +8,7 @@ if (window.indexedDB) {
 
 function connectToDb(callback) {
     var db;
-    var req = indexedDB.open(KvKeeper.DB_NAME, KvKeeper.DB_VERSION);
+    var req = indexedDB.open(KvKeeper.dbName, KvKeeper.dbVersion);
 
     req.onsuccess = function (event) {
         db = event.target.result;
@@ -33,7 +33,7 @@ function connectToDb(callback) {
 
 testDbOnPositive('clear table', function (callback) {
     connectToDb(function (db) {
-        var store = db.transaction([KvKeeper.STORE_NAME], 'readwrite').objectStore(KvKeeper.STORE_NAME);
+        var store = db.transaction([KvKeeper.storeName], 'readwrite').objectStore(KvKeeper.storeName);
 
         store.clear();
         db.close();
@@ -43,7 +43,7 @@ testDbOnPositive('clear table', function (callback) {
 });
 
 testDbOnPositive('drop database', function (callback) {
-    var req = indexedDB.deleteDatabase(KvKeeper.DB_NAME);
+    var req = indexedDB.deleteDatabase(KvKeeper.dbName);
 
     req.onsuccess = function () {
         callback();
@@ -254,7 +254,7 @@ function testDbOnPositive(label, resetDb) {
         });
 
         function getStore() {
-            return secondDb.transaction([KvKeeper.STORE_NAME], 'readwrite').objectStore(KvKeeper.STORE_NAME);
+            return secondDb.transaction([KvKeeper.storeName], 'readwrite').objectStore(KvKeeper.storeName);
         }
     });
 }
