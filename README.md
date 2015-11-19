@@ -2,7 +2,7 @@
 
 Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage
   
-  * Very light, 1.7KiB in gzip.
+  * Very light, 1.8KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
@@ -24,37 +24,37 @@ KvKeeper.setItem('foo', 'bar', function (err) {
 })
 
 KvKeeper.getItem('foo', function (err, value) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   console.log('The foo item value:', value)
 })
 
 KvKeeper.hasItem('foo', function (err, has) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   console.log(has ? 'There is foo in our storage' : 'No foo')
 })
 
 KvKeeper.removeItem('foo', function (err) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   console.log('There is no more foo')
 })
 
 KvKeeper.getKeys('foo', function (err, keys) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   console.log('We have that items in out storage:', keys)
 })
 
 KvKeeper.getLength('foo', function (err, length) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   console.log('Our storage have that count of items:', length)
 })
 
 KvKeeper.clear(function (err) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   console.log('Our storage is empty now')
 })
@@ -85,10 +85,10 @@ to basic methods and have extra `close` method that closes DB and destroys insta
 var type = 'db' // Can be auto, db or ls or can absent (not required param)
 
 KvKeeper.getStorage(type, function (err, storage) {
-  if (err) return console.error('💀')
+  if (err) return console.error('💩')
 
   storage.getItem('foo', function (err, value) {
-    if (err) return console.error('💀')
+    if (err) return console.error('💩')
 
     console.log("Look! It's foo!", value)
   })  
@@ -98,3 +98,64 @@ KvKeeper.getStorage(type, function (err, storage) {
   // You need to get new instance after closing
 })
 ```
+
+## Using with promises
+Node.js callbacks style allows to wrap methods in promises with many well known libraries:
+
+```js
+var Q = require('q')
+
+Q.ninvoke(KvKeeper, 'getItem', 'foo')
+  .then(function (val) {
+    console.log("Look! It's foo!", value)
+  })
+  .catch(function (err) {
+    console.error('💩')
+  })
+```
+
+And you can build promises chain with it:
+
+```js
+var Q = require('q')
+
+Q.ninvoke(KvKeeper, 'getStorage')
+  .then(function (storage) {
+    return Q.ninvoke(storage, 'setItem', 'foo')
+  })
+  .then(function () {
+    console.log('We have set foo!')
+  })
+  .catch(function (err) {
+    // This catch catches errors from all the chain
+    console.error('💩')
+  })
+```
+
+## Testing
+TODO
+
+## Browser support
+There is lists of browsers where library is well tested
+
+### Desktop
+#### IndexedDB
+  * Yandex Browser 1.7+
+  * Google Chrome 24+
+  * FireFox 40+ (it needs more testing between 30 and 40)
+  * InternetExplorer 10+ 
+  
+Safari doesn't support IndexedDB driver because of bugs:
+  * http://www.raymondcamden.com/2014/9/25/IndexedDB-on-iOS-8--Broken-Bad
+  * https://bugs.webkit.org/show_bug.cgi?id=136888
+  * https://github.com/pouchdb/pouchdb/issues/2533
+
+#### LocalStorage
+  * YandexBrowser 1.1+
+  * Google Chrome 22+
+  * FireFox 10+
+  * Safari 5+
+  * InternetExplorer 9+
+
+### Mobile
+TODO
