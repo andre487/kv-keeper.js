@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
 dir=$(cd `dirname $0` && pwd)
 cd "$dir/.."
@@ -19,4 +19,5 @@ uglifyjs lib/kv-keeper.js --output dist/kv-keeper.min.js \
 cd dist
 gzip -7 -c kv-keeper.min.js > kv-keeper.min.js.gz
 
+echo "# Dist files"
 ls -lh
