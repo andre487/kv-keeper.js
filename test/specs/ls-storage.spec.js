@@ -115,11 +115,15 @@ describe('KvKeeper.StorageLS', function () {
         it('should clear LS', function (done) {
             localStorage.setItem(key('foo'), 'bar');
             localStorage.setItem(key('baz'), 'qux');
+            localStorage.setItem('quux', 'norf');
 
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.clear(function (err) {
                     assert.isNull(err);
-                    assert.equal(localStorage.length, 0);
+
+                    assert.equal(localStorage.length, 1);
+                    assert.equal(localStorage.getItem('quux'), 'norf');
+
                     done();
                 });
             });
