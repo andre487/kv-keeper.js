@@ -42,6 +42,9 @@ testDbOnPositive('clear table', function (callback) {
     });
 });
 
+// Skipping tests with drop database by default
+// because of troubles with closing databases on deletion
+// in some old browsers and Safari
 testDbOnPositive('drop database', function (callback) {
     var req = indexedDB.deleteDatabase(KvKeeper.dbName);
 
@@ -52,10 +55,12 @@ testDbOnPositive('drop database', function (callback) {
     req.onblocked = req.onerror = function (event) {
         throw new Error('Drop DB error! ' + event.type);
     };
-});
+}, true);
 
-function testDbOnPositive(label, resetDb) {
-    describer('KvKeeper.StorageDB on positive with ' + label, function () {
+function testDbOnPositive(label, resetDb, skip) {
+    var localDescriber = skip ? describe.skip : describer;
+
+    localDescriber('KvKeeper.StorageDB on positive with ' + label, function () {
         var secondDb;
 
         beforeEach(function (done) {
@@ -80,8 +85,6 @@ function testDbOnPositive(label, resetDb) {
 
         it('should work on supported platform', function (done) {
             KvKeeper.getStorage('db', function (err, storage) {
-                window.__st = storage;
-
                 assert.isNull(err);
                 assert.instanceOf(storage, KvKeeper.StorageDB);
                 done();
