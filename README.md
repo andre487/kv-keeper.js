@@ -154,6 +154,10 @@ Safari doesn't support IndexedDB driver because of bugs:
 ### Mobile
 TODO
 
+## Dist
+You can generate dist files with `npm run dist` but it's not necessary because this command runs automatically
+with pre-commit git hook
+
 ## CI and Testing
 CI pipeline of the project has these steps:
   * Check errors with ESLint
@@ -163,4 +167,5 @@ CI pipeline of the project has these steps:
 Unfortunately only LocalStorage can be tested in CI. It's because of poor technologies support in PhantomJS.
 Because of it you should look to tests in couple of browsers using this algorithm:
   * Run `npm run web-server`,
-  * Open `http://localhost:8000/test/specs/test.html` ang look to report.
+  * Open `http://localhost:8000/test/specs/test.html` ang look to report,
+  * Then you can generate dist and look to `http://localhost:8000/test/specs/test-dist.html`.
