@@ -1,8 +1,8 @@
-# KV Keeper
+# KV-Keeper.js
 
 [![Build Status](https://travis-ci.org/andre487/kv-keeper.js.svg?branch=master)](https://travis-ci.org/andre487/kv-keeper.js)
 
-Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage
+This is a key-value storage for the JS that wraps IndexedDB with fallback to LocalStorage
   
   * Very light: 3.8KiB minified and 1.6KiB in gzip.
   * Can store much data when IndexedDB is available.
@@ -185,6 +185,6 @@ CI pipeline of the project has these steps:
 
 Unfortunately only LocalStorage can be tested in CI. It's because of poor technologies support in PhantomJS.
 Because of it you should look to tests in couple of browsers using this algorithm:
-  * Run `npm run web-server`,
-  * Open `http://localhost:8000/test/specs/test.html` ang look to report,
-  * Then you can generate dist and look to `http://localhost:8000/test/specs/test-dist.html`.
+  * Run `npm run web-server`
+  * Open `http://localhost:8000/test/specs/test.html` ang look to report
+  * Then you can generate dist and look to `http://localhost:8000/test/specs/test-dist.html`
