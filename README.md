@@ -8,6 +8,25 @@ Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Exports and modularity](#exports-and-modularity)
+- [Basic usage](#basic-usage)
+- [Options](#options)
+- [Advanced usage](#advanced-usage)
+- [Using with promises](#using-with-promises)
+- [Browser support](#browser-support)
+  - [Desktop](#desktop)
+    - [IndexedDB](#indexeddb)
+    - [LocalStorage](#localstorage)
+  - [Mobile](#mobile)
+- [Dist](#dist)
+- [CI and Testing](#ci-and-testing)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Exports and modularity
 If CommonJS module environment is available, Kv Keeper exports to it. 
 Otherwise exports to global variable `KvKeeper`.
