@@ -6,6 +6,7 @@
   "scripts": {
     "deps": "npm install && bower install",
     "dist": ".scripts/dist.sh",
+    "lint": "jscs .; eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "pre-commit": [
