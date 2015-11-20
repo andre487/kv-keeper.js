@@ -1,6 +1,6 @@
 before_install:
   - npm run deps
-script: npm run lint
+script: npm run lint && npm test
 language: node_js
 node_js:
   - '0.12'

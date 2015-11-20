@@ -7,7 +7,7 @@
     "deps": "npm install && bower install",
     "dist": ".scripts/dist.sh",
     "lint": "jscs .; eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha-phantomjs --reporter dot test/specs/test.html"
   },
   "pre-commit": [
     "eslint .",
@@ -33,6 +33,8 @@
     "eslint": "^1.9.0",
     "git-hooks": "^1.0.2",
     "jscs": "^2.5.1",
+    "mocha-phantomjs": "^4.0.1",
+    "phantomjs": "^1.9.18",
     "uglify-js": "^2.6.1"
   }
 }

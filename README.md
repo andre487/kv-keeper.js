@@ -1,12 +1,12 @@
 # KV Keeper
 
+[![Build Status](https://travis-ci.org/andre487/kv-keeper.js.svg?branch=master)](https://travis-ci.org/andre487/kv-keeper.js)
+
 Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage
   
   * Very light: 3.8KiB minified and 1.6KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
-
-[![Build Status](https://travis-ci.org/andre487/kv-keeper.js.svg?branch=master)](https://travis-ci.org/andre487/kv-keeper.js)
 
 ## Exports and modularity
 If CommonJS module environment is available, Kv Keeper exports to it. 

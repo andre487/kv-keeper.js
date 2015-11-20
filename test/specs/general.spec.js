@@ -68,6 +68,15 @@ describe('KvKeeper.getStorage()', function () {
 });
 
 describe('KvKeeper general methods', function () {
+    beforeEach(function (done) {
+        KvKeeper.clear(function (err) {
+            localStorage.clear(); // For be sure
+            err ?
+                done(err) :
+                done();
+        });
+    });
+
     it('should implement get and set operations', function (done) {
         KvKeeper.setItem('foo', 'bar', function (err) {
             assert.isNull(err);
