@@ -41,7 +41,7 @@ describe('KvKeeper.getStorage()', function () {
             assert.isUndefined(storage);
 
             assert.instanceOf(err, Error);
-            assert.include(err.toString(), 'Storage with type "ls" is not supported');
+            assert.include(err.toString(), 'No "ls" store support');
 
             done();
         });
@@ -54,7 +54,7 @@ describe('KvKeeper.getStorage()', function () {
             assert.isUndefined(storage);
 
             assert.instanceOf(err, Error);
-            assert.include(err.toString(), 'This platform does not support any storages');
+            assert.include(err.toString(), 'No supported stores');
 
             done();
         });
@@ -85,9 +85,9 @@ describe('KvKeeper general methods', function () {
         KvKeeper.setItem('foo', 'bar', function (err) {
             assert.isNull(err);
 
-            KvKeeper.hasItem('foo', function (err, has) {
+            KvKeeper.getItem('foo', function (err, val) {
                 assert.isNull(err);
-                assert.isTrue(has);
+                assert.equal(val, 'bar');
 
                 done();
             });
@@ -154,7 +154,7 @@ describe('KvKeeper.configure()', function () {
     it('should throw error when you trying to set incorrect option', function () {
         assert.throws(function () {
             KvKeeper.configure({dbName: 'foo', storeNames: 'bars', defaultType: 'ls'});
-        }, 'Option storeNames is not configurable');
+        }, 'storeNames is not configurable');
 
         assert.equal(KvKeeper.dbName, 'kv-keeper-items');
         assert.equal(KvKeeper.storeName, 'items');

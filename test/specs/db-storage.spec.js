@@ -122,30 +122,6 @@ function testDbOnPositive(label, resetDb, skip) {
             });
         });
 
-        describe('#hasItem()', function () {
-            it('should provide true for existing in DB item', function (done) {
-                getStore().add({key: 'foo', value: false}).onsuccess = function () {
-                    KvKeeper.getStorage('db', function (err, storage) {
-                        storage.hasItem('foo', function (err, has) {
-                            assert.isNull(err);
-                            assert.isTrue(has);
-                            done();
-                        });
-                    });
-                };
-            });
-
-            it('should provide false for absent item', function (done) {
-                KvKeeper.getStorage('db', function (err, storage) {
-                    storage.hasItem('foo', function (err, has) {
-                        assert.isNull(err);
-                        assert.isFalse(has);
-                        done();
-                    });
-                });
-            });
-        });
-
         describe('#removeItem()', function () {
             it('should remove items from DB', function (done) {
                 getStore().add({key: 'foo', value: 'bar'}).onsuccess = function () {
@@ -153,9 +129,9 @@ function testDbOnPositive(label, resetDb, skip) {
                         checkHas();
 
                         function checkHas() {
-                            storage.hasItem('foo', function (err, has) {
+                            storage.getItem('foo', function (err, val) {
                                 assert.isNull(err);
-                                assert.isTrue(has);
+                                assert.ok(val);
 
                                 remove();
                             });
@@ -170,9 +146,9 @@ function testDbOnPositive(label, resetDb, skip) {
                         }
 
                         function checkHasNot() {
-                            storage.hasItem('foo', function (err, has) {
+                            storage.getItem('foo', function (err, has) {
                                 assert.isNull(err);
-                                assert.isFalse(has);
+                                assert.isNull(has);
                                 done();
                             });
                         }

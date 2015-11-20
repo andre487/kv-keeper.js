@@ -43,30 +43,6 @@ describe('KvKeeper.StorageLS', function () {
         });
     });
 
-    describe('#hasItem()', function () {
-        it('should provide true for existing in LS item', function (done) {
-            localStorage.setItem(key('foo'), false);
-
-            KvKeeper.getStorage('ls', function (err, storage) {
-                storage.hasItem('foo', function (err, has) {
-                    assert.isNull(err);
-                    assert.isTrue(has);
-                    done();
-                });
-            });
-        });
-
-        it('should provide false for absent item', function (done) {
-            KvKeeper.getStorage('ls', function (err, storage) {
-                storage.hasItem('foo', function (err, has) {
-                    assert.isNull(err);
-                    assert.isFalse(has);
-                    done();
-                });
-            });
-        });
-    });
-
     describe('#removeItem()', function () {
         it('should remove items from LS', function (done) {
             localStorage.setItem(key('foo'), 'bar');

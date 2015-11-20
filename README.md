@@ -2,7 +2,7 @@
 
 Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage
   
-  * Very light, 1.8KiB in gzip.
+  * Very light: 3.8KiB minified and 1.6KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
@@ -24,37 +24,31 @@ KvKeeper.setItem('foo', 'bar', function (err) {
 })
 
 KvKeeper.getItem('foo', function (err, value) {
-  if (err) return console.error('💩')
+  if (err) return console.error('Oh no!')
 
   console.log('The foo item value:', value)
 })
 
-KvKeeper.hasItem('foo', function (err, has) {
-  if (err) return console.error('💩')
-
-  console.log(has ? 'There is foo in our storage' : 'No foo')
-})
-
 KvKeeper.removeItem('foo', function (err) {
-  if (err) return console.error('💩')
+  if (err) return console.error('Oh no!')
 
   console.log('There is no more foo')
 })
 
-KvKeeper.getKeys('foo', function (err, keys) {
-  if (err) return console.error('💩')
+KvKeeper.getKeys(function (err, keys) {
+  if (err) return console.error('Oh no!')
 
   console.log('We have that items in out storage:', keys)
 })
 
 KvKeeper.getLength('foo', function (err, length) {
-  if (err) return console.error('💩')
+  if (err) return console.error('Oh no!')
 
   console.log('Our storage have that count of items:', length)
 })
 
 KvKeeper.clear(function (err) {
-  if (err) return console.error('💩')
+  if (err) return console.error('Oh no!')
 
   console.log('Our storage is empty now')
 })
@@ -85,10 +79,10 @@ to basic methods and have extra `close` method that closes DB and destroys insta
 var type = 'db' // Can be auto, db or ls or can absent (not required param)
 
 KvKeeper.getStorage(type, function (err, storage) {
-  if (err) return console.error('💩')
+  if (err) return console.error('Error =/')
 
   storage.getItem('foo', function (err, value) {
-    if (err) return console.error('💩')
+    if (err) return console.error('Error =/')
 
     console.log("Look! It's foo!", value)
   })  
@@ -110,7 +104,7 @@ Q.ninvoke(KvKeeper, 'getItem', 'foo')
     console.log("Look! It's foo!", value)
   })
   .catch(function (err) {
-    console.error('💩')
+    console.error('👎')
   })
 ```
 
