@@ -6,8 +6,9 @@
   "scripts": {
     "deps": "npm install && bower install",
     "dist": ".scripts/dist.sh",
-    "lint": "jscs .; eslint .",
-    "test": "mocha-phantomjs --reporter dot test/specs/test.html"
+    "lint": "eslint .; jscs .",
+    "test": "mocha-phantomjs --reporter dot test/specs/test.html",
+    "web-server": "php -S localhost:8000"
   },
   "pre-commit": [
     "eslint .",

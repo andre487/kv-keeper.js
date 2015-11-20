@@ -128,9 +128,6 @@ Q.ninvoke(KvKeeper, 'getStorage')
   })
 ```
 
-## Testing
-TODO
-
 ## Browser support
 There is lists of browsers where library is well tested
 
@@ -152,6 +149,18 @@ Safari doesn't support IndexedDB driver because of bugs:
   * FireFox 10+
   * Safari 5+
   * InternetExplorer 9+
+  * PhantomJS 1.9.7+
 
 ### Mobile
 TODO
+
+## CI and Testing
+CI pipeline of the project has these steps:
+  * Check errors with ESLint
+  * Check code style with JSCS using [yandex](https://github.com/ymaps/codestyle) preset
+  * Run tests with Mocha and PhantomJS
+
+Unfortunately only LocalStorage can be tested in CI. It's because of poor technologies support in PhantomJS.
+Because of it you should look to tests in couple of browsers using this algorithm:
+  * Run `npm run web-server`,
+  * Open `http://localhost:8000/test/specs/test.html` ang look to report.
