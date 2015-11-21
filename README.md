@@ -25,6 +25,9 @@ This is a key-value storage for the JS that wraps IndexedDB with fallback to Loc
   - [Mobile](#mobile)
 - [Dist](#dist)
 - [CI and Testing](#ci-and-testing)
+  - [CI pipeline](#ci-pipeline)
+  - [Testing in PhantomJS](#testing-in-phantomjs)
+  - [Tests with database dropping](#tests-with-database-dropping)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -179,13 +182,20 @@ You can generate dist files with `npm run dist` but it's not necessary because t
 with pre-commit git hook
 
 ## CI and Testing
+### CI pipeline
 CI pipeline of the project has these steps:
   * Check errors with ESLint
   * Check code style with JSCS using [yandex](https://github.com/ymaps/codestyle) preset
   * Run tests with Mocha and PhantomJS
 
+### Testing in PhantomJS
 Unfortunately only LocalStorage can be tested in CI. It's because of poor technologies support in PhantomJS.
 Because of it you should look to tests in couple of browsers using this algorithm:
   * Run `npm run web-server`
-  * Open `http://localhost:8000/test/specs/test.html` ang look to report
-  * Then you can generate dist and look to `http://localhost:8000/test/specs/test-dist.html`
+  * Open `http://localhost:8000/test/specs/test.html` ang look at report
+  * Then you can generate dist and look at `http://localhost:8000/test/specs/test-dist.html`
+  
+### Tests with database dropping
+These tests are very unstable because of unpredictable browsers behaviour. Because of it these tests are
+disabled by default. You can enable them by adding `tests=all` to query string of tests page. You can do it like this:
+`http://localhost:8000/test/specs/test-dist.html?tests=all`
