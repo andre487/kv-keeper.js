@@ -31,7 +31,7 @@ function getReportContainer() {
 
 function warpUpDb() {
     KvKeeper.configure({
-        dbName: 'benchmark-vk-keeper-db',
+        dbName: 'benchmark-kv-keeper-db',
         storeName: 'benchmark-store'
     });
 
