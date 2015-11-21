@@ -13,6 +13,7 @@ window.onerror = function (err) {
 
 warpUpDb()
     .then(runSetBenchmarks)
+    .then(runGetBenchmarks)
     .then(printReport)
     .done();
 
@@ -79,6 +80,51 @@ function runSetBenchmarks() {
                 }
 
                 storage.setItem('foo', 'bar', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    deferred.resolve();
+                });
+            });
+        }, {defer: true})
+        .run({async: true});
+
+    return deferredAll.promise;
+}
+
+function runGetBenchmarks() {
+    var deferredAll = Q.defer();
+    var suite = new Benchmark.Suite('KV-Keeper.js');
+
+    suite
+        .on('cycle', function (event) {
+            timings.push(String(event.target));
+        })
+        .on('complete', function () {
+            timings.push('Fastest is ' + this.filter('fastest').pluck('name'));
+            deferredAll.resolve(timings);
+        })
+        .add('LS#getItem', function (deferred) {
+            KvKeeper.getStorage('ls', function (err, storage) {
+                if (err) {
+                    throw err;
+                }
+
+                storage.getItem('foo', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    deferred.resolve();
+                });
+            });
+        }, {defer: true})
+        .add('DB#getItem', function (deferred) {
+            KvKeeper.getStorage('db', function (err, storage) {
+                if (err) {
+                    throw err;
+                }
+
+                storage.getItem('foo', function (err) {
                     if (err) {
                         throw err;
                     }
