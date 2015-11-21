@@ -204,6 +204,7 @@ disabled by default. You can enable them by adding `tests=all` to query string o
 ### Pre-commit hooks
 There are some automatic steps usually done before a commit:
   * Check changed files with ESLint and JSCS
+  * Run integration tests, can be skipped by setting `SKIP_TESTS=1`
   * Prepare dist files (see [Dist](#dist))
   * Update Table of Contents in README.md
 
