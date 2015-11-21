@@ -15,6 +15,7 @@ warpUpDb()
     .then(runSetBenchmarks)
     .then(runGetBenchmarks)
     .then(runRemoveBenchmarks)
+    .then(runGetKeysBenchmarks)
     .then(printReport)
     .done();
 
@@ -171,6 +172,51 @@ function runRemoveBenchmarks() {
                 }
 
                 storage.removeItem('foo', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    deferred.resolve();
+                });
+            });
+        }, {defer: true})
+        .run({async: true});
+
+    return deferredAll.promise;
+}
+
+function runGetKeysBenchmarks() {
+    var deferredAll = Q.defer();
+    var suite = new Benchmark.Suite();
+
+    suite
+        .on('cycle', function (event) {
+            timings.push(String(event.target));
+        })
+        .on('complete', function () {
+            timings.push('Fastest is ' + this.filter('fastest').pluck('name'));
+            deferredAll.resolve(timings);
+        })
+        .add('LS#getKeys', function (deferred) {
+            KvKeeper.getStorage('ls', function (err, storage) {
+                if (err) {
+                    throw err;
+                }
+
+                storage.getKeys(function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    deferred.resolve();
+                });
+            });
+        }, {defer: true})
+        .add('DB#getKeys', function (deferred) {
+            KvKeeper.getStorage('db', function (err, storage) {
+                if (err) {
+                    throw err;
+                }
+
+                storage.getKeys(function (err) {
                     if (err) {
                         throw err;
                     }
