@@ -6,6 +6,7 @@
   "scripts": {
     "deps": "npm install && bower install",
     "dist": ".scripts/dist.sh",
+    "readme-toc": "doctoc README.md",
     "lint": "eslint .; jscs .",
     "test": "mocha-phantomjs --reporter dot test/specs/test.html && mocha-phantomjs --reporter dot test/specs/test-dist.html",
     "web-server": "php -S localhost:8000"

@@ -28,6 +28,7 @@ This is a key-value storage for the JS that wraps IndexedDB with fallback to Loc
   - [CI pipeline](#ci-pipeline)
   - [Testing in PhantomJS](#testing-in-phantomjs)
   - [Tests with database dropping](#tests-with-database-dropping)
+  - [Pre-commit hooks](#pre-commit-hooks)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -199,3 +200,11 @@ Because of it you should look to tests in couple of browsers using this algorith
 These tests are very unstable because of unpredictable browsers behaviour. Because of it these tests are
 disabled by default. You can enable them by adding `tests=all` to query string of tests page. You can do it like this:
 `http://localhost:8000/test/specs/test-dist.html?tests=all`
+
+### Pre-commit hooks
+There are some automatic steps usually done before a commit:
+  * Check changed files with ESLint and JSCS
+  * Prepare dist files (see [Dist](#dist))
+  * Update Table of Contents in README.md
+
+So you don't have to do it by yourself. 
