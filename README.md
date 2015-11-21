@@ -1,6 +1,7 @@
 # KV-Keeper.js
 
 [![Build Status](https://travis-ci.org/andre487/kv-keeper.js.svg?branch=master)](https://travis-ci.org/andre487/kv-keeper.js)
+[![Code Climate](https://codeclimate.com/github/andre487/kv-keeper.js/badges/gpa.svg)](https://codeclimate.com/github/andre487/kv-keeper.js)
 
 This is a key-value storage for the JS that wraps IndexedDB with fallback to LocalStorage
   
