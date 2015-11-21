@@ -14,6 +14,7 @@ window.onerror = function (err) {
 warpUpDb()
     .then(runSetBenchmarks)
     .then(runGetBenchmarks)
+    .then(runRemoveBenchmarks)
     .then(printReport)
     .done();
 
@@ -49,7 +50,7 @@ function warpUpDb() {
 
 function runSetBenchmarks() {
     var deferredAll = Q.defer();
-    var suite = new Benchmark.Suite('KV-Keeper.js');
+    var suite = new Benchmark.Suite();
 
     suite
         .on('cycle', function (event) {
@@ -94,7 +95,7 @@ function runSetBenchmarks() {
 
 function runGetBenchmarks() {
     var deferredAll = Q.defer();
-    var suite = new Benchmark.Suite('KV-Keeper.js');
+    var suite = new Benchmark.Suite();
 
     suite
         .on('cycle', function (event) {
@@ -125,6 +126,51 @@ function runGetBenchmarks() {
                 }
 
                 storage.getItem('foo', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    deferred.resolve();
+                });
+            });
+        }, {defer: true})
+        .run({async: true});
+
+    return deferredAll.promise;
+}
+
+function runRemoveBenchmarks() {
+    var deferredAll = Q.defer();
+    var suite = new Benchmark.Suite();
+
+    suite
+        .on('cycle', function (event) {
+            timings.push(String(event.target));
+        })
+        .on('complete', function () {
+            timings.push('Fastest is ' + this.filter('fastest').pluck('name'));
+            deferredAll.resolve(timings);
+        })
+        .add('LS#removeItem', function (deferred) {
+            KvKeeper.getStorage('ls', function (err, storage) {
+                if (err) {
+                    throw err;
+                }
+
+                storage.removeItem('foo', function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    deferred.resolve();
+                });
+            });
+        }, {defer: true})
+        .add('DB#removeItem', function (deferred) {
+            KvKeeper.getStorage('db', function (err, storage) {
+                if (err) {
+                    throw err;
+                }
+
+                storage.removeItem('foo', function (err) {
                     if (err) {
                         throw err;
                     }
