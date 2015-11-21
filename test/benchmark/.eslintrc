@@ -1,0 +1,11 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "KvKeeper": false,
+    "Benchmark": false,
+    "_": false,
+    "Q": false
+  }
+}
