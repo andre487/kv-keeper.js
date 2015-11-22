@@ -170,21 +170,18 @@ One item limit is between ~9MiB in IE11 and ~128MiB in FireFox 42.
   * Yandex Browser 1.7+
   * Google Chrome 24+
   * FireFox 40+ (it needs more testing between 30 and 40)
-  * InternetExplorer 10+ 
+  * InternetExplorer 10+
+  * Safari 9+
   
-Safari doesn't support IndexedDB driver because of bugs:
-  * http://www.raymondcamden.com/2014/9/25/IndexedDB-on-iOS-8--Broken-Bad
-  * https://bugs.webkit.org/show_bug.cgi?id=136888
-  * https://github.com/pouchdb/pouchdb/issues/2533
-
 #### LocalStorage
-One item limit is between ~2.5MiB in Chrome 22 and exactly ~5MiB in FireFox 42. So the all storage size.
+One item limit is between ~2.5MiB (in Chrome 22 and Safari 5-9) and exactly ~5MiB (in FireFox 42). 
+So the all storage size.
 
   * YandexBrowser 1.1+
   * Google Chrome 22+
   * FireFox 10+
-  * Safari 5+
   * InternetExplorer 9+
+  * Safari 5+
   * PhantomJS 1.9.7+
 
 ### Mobile
