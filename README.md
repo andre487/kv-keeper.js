@@ -165,12 +165,13 @@ Official notes about limits you can find on the
 #### IndexedDB
 In tests of storage size 128MiB was successfully saved in all browsers.
 
-One item limit is between ~9MiB in IE11 and ~128MiB in FireFox 42.
+One item limit is between ~9MiB in IE11 and ~128MiB in FireFox 42 and Edge 13.
 
   * Yandex Browser 1.7+
   * Google Chrome 24+
   * FireFox 40+ (it needs more testing between 30 and 40)
   * InternetExplorer 10+
+  * Edge 13+
   * Safari 9+
   
 #### LocalStorage
