@@ -153,10 +153,18 @@ Q.ninvoke(KvKeeper, 'getStorage')
 ```
 
 ## Browser support
-There is lists of browsers where library is well tested
+There is lists of browsers where library is well tested.
+
+Store limits measured in [special tests](/test/limits/limits-test.js). In that tests
+stored symbols count was tested but we accept hypothesis that 1 symbol == 1 byte of content.
+
+Official notes about limits you can find on the 
+[MDN](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Browser_storage_limits_and_eviction_criteria).
 
 ### Desktop
 #### IndexedDB
+Store limit of one key is between ~9MiB in IE11 and ~128MiB in FireFox 42
+
   * Yandex Browser 1.7+
   * Google Chrome 24+
   * FireFox 40+ (it needs more testing between 30 and 40)
@@ -168,6 +176,8 @@ Safari doesn't support IndexedDB driver because of bugs:
   * https://github.com/pouchdb/pouchdb/issues/2533
 
 #### LocalStorage
+Store limit of one key is between ~2.5MiB in Chrome 22 and exactly ~5MiB in FireFox 42
+
   * YandexBrowser 1.1+
   * Google Chrome 22+
   * FireFox 10+
