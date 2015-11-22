@@ -35,7 +35,7 @@ describe('KvKeeper.StorageLS sizes test', function () {
                 5 * 1024 * 1024 // FireFox 42 limit
             ],
             function (count) {
-                it('should store ' + Math.floor(count) + ' of symbols in one item', function () {
+                it('should store ' + Math.floor(count) + ' of bytes in one item', function () {
                     var stub = _.repeat('1', count);
                     return Q.ninvoke(KvKeeper, 'setItem', 'foo', stub);
                 });
