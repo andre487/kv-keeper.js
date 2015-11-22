@@ -163,7 +163,9 @@ Official notes about limits you can find on the
 
 ### Desktop
 #### IndexedDB
-Store limit of one key is between ~9MiB in IE11 and ~128MiB in FireFox 42
+In tests of storage size 128MiB was successfully saved in all browsers.
+
+One item limit is between ~9MiB in IE11 and ~128MiB in FireFox 42.
 
   * Yandex Browser 1.7+
   * Google Chrome 24+
@@ -176,7 +178,7 @@ Safari doesn't support IndexedDB driver because of bugs:
   * https://github.com/pouchdb/pouchdb/issues/2533
 
 #### LocalStorage
-Store limit of one key is between ~2.5MiB in Chrome 22 and exactly ~5MiB in FireFox 42
+One item limit is between ~2.5MiB in Chrome 22 and exactly ~5MiB in FireFox 42. So the all storage size.
 
   * YandexBrowser 1.1+
   * Google Chrome 22+
