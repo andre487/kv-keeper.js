@@ -260,7 +260,7 @@ describer('KvKeeper.StorageDB on negative', function () {
 
             instance.init(function (err) {
                 assert.instanceOf(err, Error);
-                assert.include(err.toString(), '[kv-keeper] DB request error');
+                assert.include(err.toString(), '[kv-keeper] DB open request error');
                 assert.propertyVal(err, 'event', errEvent);
 
                 done();
