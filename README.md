@@ -187,6 +187,8 @@ So the all storage size.
 
 ### Mobile
 #### IndexedDB
+Safe data chunk is 8MiB. After that some mobile browsers can crash. 
+
 Android:
   * YandexBrowser 15.6+
   * Android Browser 5.0.1+
