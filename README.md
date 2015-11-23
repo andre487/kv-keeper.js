@@ -18,11 +18,13 @@ This is a key-value storage for the JS that wraps IndexedDB with fallback to Loc
 - [Options](#options)
 - [Advanced usage](#advanced-usage)
 - [Using with promises](#using-with-promises)
-- [Browser support](#browser-support)
+- [Well tested browsers](#well-tested-browsers)
   - [Desktop](#desktop)
     - [IndexedDB](#indexeddb)
     - [LocalStorage](#localstorage)
   - [Mobile](#mobile)
+    - [IndexedDB](#indexeddb-1)
+    - [LocalStorage](#localstorage-1)
 - [Dist](#dist)
 - [CI and Testing](#ci-and-testing)
   - [CI pipeline](#ci-pipeline)
@@ -152,9 +154,7 @@ Q.ninvoke(KvKeeper, 'getStorage')
   })
 ```
 
-## Browser support
-There is lists of browsers where library is well tested.
-
+## Well tested browsers
 Store limits measured in [special tests](/test/limits/limits-test.js). In that tests
 stored symbols count was tested but we accept hypothesis that 1 symbol == 1 byte of content.
 
@@ -186,7 +186,36 @@ So the all storage size.
   * PhantomJS 1.9.7+
 
 ### Mobile
-TODO
+#### IndexedDB
+Android:
+  * YandexBrowser 15.6+
+  * Android Browser 5.0.1+
+  * Google Chrome 34+
+  * FireFox 42+
+  * Opera 33+
+  * UC Web 10.5+
+
+Safari and WebView (and all browsers) in iOS 8+. 
+
+Internet Explorer 10+ (Windows Phone 8).
+
+**Known issues:** 
+  1. You should not create more then one collection in Kv-Keeper.js database in iOS to avoid 
+     [this bug](http://www.raymondcamden.com/2014/9/25/IndexedDB-on-iOS-8--Broken-Bad).
+  2. Safe to store data chunk is about 8MiB. After that threshold some browsers (like Safari on iOS 8) will crash.
+  3. Safari 8 crashes after saving 5 chunks by 5 MiB in a loop. 
+
+#### LocalStorage
+One item limit is between ~2.5MiB (Android Browser 4.1.2 and Safari 5-9) and exactly ~5MiB 
+(in FireFox 42 for Android and Internet Explorer 9).
+So the all storage size.
+
+ * Android Browser 4.1.2+
+ * Internet Explorer 9+ (Windows Phone 7.5)
+
+Testing on Safari 5-7 is needed.
+
+For more information see detailed but dirty [testing notes](https://yadi.sk/i/qGZu_d-FkgC9a)
 
 ## Dist
 You can generate dist files with `npm run dist` but it's not necessary because this command runs automatically
