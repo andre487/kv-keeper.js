@@ -1,5 +1,5 @@
 var describer;
-if (window.indexedDB) {
+if (window.indexedDB && indexedDB.open && window.IDBKeyRange) {
     describer = describe;
 } else {
     describer = describe.skip;

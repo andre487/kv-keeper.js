@@ -29,7 +29,7 @@ describe('KvKeeper.StorageLS sizes test', function () {
                 2.5 * 1024 * 1024 - keyLength - 5, // Chrome 22 limit
                 2.5 * 1024 * 1024, // FireFox 10 limit (but there is a bug with which you can write more data)
                 4.5 * 1024 * 1024 + 80779, // FireFox 31 limit
-                4.7 * 1024 * 1024 + 70 * 1024 - 18, // IE11 limit
+                4.7 * 1024 * 1024 + 70 * 1024 - 18, // IE11, Android FireFox 42 limit
                 5 * 1024 * 1024 - keyLength - 529, // FireFox 44-dev limit
                 5 * 1024 * 1024 - keyLength - 5, // Chrome 48 limit,
                 5 * 1024 * 1024 // FireFox 42 limit
@@ -94,12 +94,15 @@ describe('KvKeeper.StorageDB sizes test', function () {
                 512,
                 1024,
                 1024 * 1024,
+                8 * 1024 * 1024 + 512 * 1024, // iOS 8 Safari 8 limit. Then crash and need to restart
                 9 * 1024 * 1024, // IE11 limit. Unstable after this: sometimes returns undefined error, sometimes "Not enough memory"
-                127 * 1024 * 1024 - 59, // Chrome 46, 48 limit. If more symbols got "The serialized value is too large"
+                63 * 1024 * 1024 + 1023 * 1024, // GT-I9500 (Android 5.0.1) limit
+                100 * 1024 * 1024, // Android 6 Nexus 5 limit, then may be crash
+                127 * 1024 * 1024 - 59, // Chrome 46, 48 limit (Desktop, Android). If more symbols got "The serialized value is too large"
                 128 * 1024 * 1024 - 1 // FireFox 42, 44-dev limit. If more symbols got "InternalError: allocation size overflowrepeat"
             ],
             function (count) {
-                it('should store ' + Math.floor(count) + ' of symbols', function () {
+                it('should store ' + Math.floor(count) + ' bytes', function () {
                     var stub = _.repeat('1', count);
                     return Q.ninvoke(KvKeeper, 'setItem', 'foo', stub);
                 });
