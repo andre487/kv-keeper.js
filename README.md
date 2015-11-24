@@ -214,8 +214,7 @@ So the all storage size.
 
  * Android Browser 4.1.2+
  * Internet Explorer 9+ (Windows Phone 7.5)
-
-Testing on Safari 5-7 is needed.
+ * iOS 7+ Safari and WebView
 
 For more information see detailed but dirty [testing notes](https://yadi.sk/i/qGZu_d-FkgC9a)
 
