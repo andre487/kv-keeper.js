@@ -1,4 +1,4 @@
-/* ~HEADER START~ */
+
 (function (global, exports) {
     'use strict';
     var LIB_METHODS = ['setItem', 'getItem', 'removeItem', 'getKeys', 'getLength', 'clear'];
@@ -161,124 +161,7 @@
             });
         };
     });
-    /* ~HEADER END~ */
-
-    /* ~LS START~ */
-    /**
-     * LocalStorage driver
-     * @constructor
-     */
-    var LS = KvKeeper.StorageLS = function (storage) {
-        var that = this;
-
-        /**
-         * Ensure LocalStorage driver is ready
-         * @param {KvKeeper.Callback} callback
-         */
-        that.init = function (callback) {
-            callback(null, that);
-        };
-
-        /**
-         * Set item to storage
-         * @param {String} key
-         * @param {String} value
-         * @param {KvKeeper.Callback} callback
-         */
-        that.setItem = function (key, value, callback) {
-            try { // Error example: no space left for store or on device
-                storage.setItem(LS.createKey(key), value);
-                callback(null);
-            } catch (e) {
-                callback(e);
-            }
-        };
-
-        /**
-         * Get item from storage
-         * @param {String} key
-         * @param {KvKeeper.Callback} callback
-         */
-        that.getItem = function (key, callback) {
-            callback(null, storage.getItem(LS.createKey(key)));
-        };
-
-        /**
-         * Remove item from storage by key
-         * @param {String} key
-         * @param {KvKeeper.Callback} callback
-         */
-        that.removeItem = function (key, callback) {
-            storage.removeItem(LS.createKey(key));
-            callback(null);
-        };
-
-        /**
-         * Get keys of stored items
-         * @param {KvKeeper.Callback} callback
-         */
-        that.getKeys = function (callback) {
-            var keys = getObjectKeys(storage).filter(isKeeperKey);
-            callback(null, keys);
-        };
-
-        /**
-         * Get stored items count
-         * @param {KvKeeper.Callback} callback
-         */
-        that.getLength = function (callback) {
-            callback(null, getObjectKeys(storage).filter(isKeeperKey).length);
-        };
-
-        /**
-         * Clear all the storage
-         * @param {KvKeeper.Callback} callback
-         */
-        that.clear = function (callback) {
-            getObjectKeys(storage)
-                .filter(isKeeperKey)
-                .forEach(storage.removeItem, storage);
-            callback(null);
-        };
-
-        /**
-         * Close instance
-         */
-        that.close = function () {
-            instances.ls = null;
-        };
-    };
-
-    /**
-     * Build a namespaced key for LS
-     * @param {String} base
-     * @returns {String}
-     */
-    LS.createKey = function (base) {
-        return KvKeeper.namespace + base;
-    };
-
-    /**
-     * Test is key ours
-     * @param {String} key
-     * @returns {Boolean}
-     */
-    var isKeeperKey = LS.isKeeperKey = function (key) {
-        return key.indexOf(KvKeeper.namespace) == 0;
-    };
-
-    /**
-     * Create LS storage instance
-     * or null if localStorage is not supported
-     * @returns {KvKeeper.Storage|null}
-     */
-    LS.create = function () {
-        var storage = global.localStorage;
-        return storage ? new LS(storage) : null;
-    };
-    /* ~LS END~ */
-
-    /* ~DB START~ */
+    
     /**
      * IndexedDB driver
      * @constructor
@@ -499,8 +382,5 @@
                 callback(null, event.target.result);
         };
     }
-    /* ~DB END~ */
-
-    /* ~FOOTER START~ */
+    
 })(self, typeof exports != 'undefined' && exports);
-/* ~FOOTER END~ */

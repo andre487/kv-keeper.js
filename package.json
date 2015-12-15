@@ -5,7 +5,7 @@
   "main": "dist/kv-storage.min.js",
   "scripts": {
     "deps": "npm install && bower install",
-    "dist": ".scripts/dist.sh",
+    "dist": ".scripts/dist.js",
     "readme-toc": "doctoc README.md",
     "lint": "eslint .; jscs .",
     "test": "mocha-phantomjs --reporter dot test/specs/test.html && mocha-phantomjs --reporter dot test/specs/test-dist.html",
@@ -34,6 +34,7 @@
     "jscs": "^2.5.1",
     "mocha-phantomjs": "^4.0.1",
     "phantomjs": "^1.9.18",
+    "shelljs": "^0.5.3",
     "uglify-js": "^2.6.1"
   }
 }

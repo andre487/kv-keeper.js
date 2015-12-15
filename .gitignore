@@ -30,5 +30,5 @@ node_modules
 bower_components
 
 # Some test stuff
-dist/kv-keeper.work.js
-dist/kv-keeper.min.js.gz
+dist/*.work.js
+dist/*.gz
