@@ -16,6 +16,7 @@
     var getObjectKeys = Object.keys;
 
     var instances = {};
+    var errorListeners = [];
 
     /**
      * KvKeeper
@@ -31,6 +32,43 @@
     }
 
     setDefaultConfiguration();
+
+    /**
+     * Add a global error listener
+     * @param {Function} listener
+     */
+    KvKeeper.addErrorListener = function (listener) {
+        if (typeof listener != 'function') {
+            throw new Error('Listener must be a function');
+        }
+        errorListeners.push(listener);
+    };
+
+    /**
+     * Remove an error listener
+     * @param {Function} listener
+     */
+    KvKeeper.removeErrorListener = function (listener) {
+        var index = errorListeners.indexOf(listener);
+        if (index > -1) {
+            errorListeners = errorListeners.splice(index, 1);
+        }
+    };
+
+    /**
+     * Get all error listeners
+     * @returns {Function[]}
+     */
+    KvKeeper.getErrorListeners = function () {
+        return errorListeners;
+    };
+
+    /**
+     * Remove all the error listeners
+     */
+    KvKeeper.removeAllErrorListeners = function () {
+        errorListeners = [];
+    };
 
     function setDefaultConfiguration() {
         KvKeeper.dbVersion = 1;
@@ -79,6 +117,17 @@
         }
     }
 
+    function wrapCallback(callback) {
+        return function wrappedCallback(err, result) {
+            if (err) {
+                for (var i = 0; i < errorListeners.length; i++) {
+                    errorListeners[i](err);
+                }
+            }
+            return callback(err, result);
+        };
+    }
+
     /**
      * Get key-value storage instance
      * @param {String} [type=auto] Storage type: ls, db, auto
@@ -89,6 +138,8 @@
             callback = type;
             type = null;
         }
+
+        callback = wrapCallback(callback);
 
         type = type || KvKeeper.defaultType;
         validateType(type);
@@ -184,6 +235,7 @@
          * @param {KvKeeper.Callback} callback
          */
         that.setItem = function (key, value, callback) {
+            callback = wrapCallback(callback);
             try { // Error example: no space left for store or on device
                 storage.setItem(LS.createKey(key), value);
                 callback(null);
