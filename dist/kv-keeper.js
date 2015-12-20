@@ -51,7 +51,7 @@
     KvKeeper.removeErrorListener = function (listener) {
         var index = errorListeners.indexOf(listener);
         if (index > -1) {
-            errorListeners = errorListeners.splice(index, 1);
+            errorListeners.splice(index, 1);
         }
     };
 
@@ -421,9 +421,10 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getKeys = function (callback) {
+            callback = wrapCallback(callback);
+
             var keys = [];
 
-            callback = wrapCallback(callback);
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).openCursor(),
                 function (err, event) {

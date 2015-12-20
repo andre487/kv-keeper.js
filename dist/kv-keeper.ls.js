@@ -51,7 +51,7 @@
     KvKeeper.removeErrorListener = function (listener) {
         var index = errorListeners.indexOf(listener);
         if (index > -1) {
-            errorListeners = errorListeners.splice(index, 1);
+            errorListeners.splice(index, 1);
         }
     };
 
