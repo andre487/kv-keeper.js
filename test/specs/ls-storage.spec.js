@@ -1,10 +1,16 @@
 describe('KvKeeper.StorageLS', function () {
+    var sandbox;
+
     beforeEach(function () {
+        sandbox = sinon.sandbox.create();
         localStorage.clear();
     });
 
     afterEach(function () {
+        sandbox.restore();
         localStorage.clear();
+
+        KvKeeper.removeAllErrorListeners();
     });
 
     var key = KvKeeper.StorageLS.createKey;
@@ -24,6 +30,48 @@ describe('KvKeeper.StorageLS', function () {
                     assert.isNull(err);
                     assert.equal(localStorage.getItem(key('foo')), 'bar');
                     done();
+                });
+            });
+        });
+
+        describe('error', function () {
+            var originalSetItem = localStorage.setItem;
+
+            beforeEach(function () {
+                localStorage.setItem = function () {
+                    throw new Error('setItem test error');
+                };
+            });
+
+            afterEach(function () {
+                localStorage.setItem = originalSetItem;
+            });
+
+            it('should handle an LS error', function (done) {
+                KvKeeper.getStorage('ls', function (err, storage) {
+                    storage.setItem('foo', 'bar', function (err) {
+                        assert.ok(err, 'Error is not handled');
+                        assert.equal(err.message, 'setItem test error');
+
+                        done();
+                    });
+                });
+            });
+
+            it('should call global error listener', function (done) {
+                var listener = sinon.spy();
+
+                KvKeeper.addErrorListener(listener);
+
+                KvKeeper.getStorage('ls', function (err, storage) {
+                    storage.setItem('foo', 'bar', function (err) {
+                        assert.ok(err, 'Error is not handled');
+
+                        sinon.assert.calledOnce(listener);
+                        assert.equal(listener.args[0][0].message, 'setItem test error');
+
+                        done();
+                    });
                 });
             });
         });

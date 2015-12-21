@@ -5,7 +5,7 @@
 
 This is a key-value storage for the JS that wraps IndexedDB with fallback to LocalStorage
   
-  * Very light: 3.8KiB minified and 1.6KiB in gzip.
+  * Very light: 4.2KiB minified and 1.7KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
@@ -18,6 +18,7 @@ This is a key-value storage for the JS that wraps IndexedDB with fallback to Loc
 - [Options](#options)
 - [Advanced usage](#advanced-usage)
 - [Using with promises](#using-with-promises)
+- [Global error handling](#global-error-handling)
 - [Well tested browsers](#well-tested-browsers)
   - [Desktop](#desktop)
     - [IndexedDB](#indexeddb)
@@ -152,6 +153,24 @@ Q.ninvoke(KvKeeper, 'getStorage')
     // This catch catches errors from all the chain
     console.error('💩')
   })
+```
+
+## Global error handling
+
+You can define a global error listeners:
+
+```js
+function listener(err) {
+  console.error('We have an error', err)
+}
+
+KvKeeper.addErrorListener(listener)
+
+KvKeeper.getErrorListeners() // => [listener]
+
+KvKeeper.removeErrorListener(listener)
+
+KvKeeper.removeAllErrorListeners()
 ```
 
 ## Well tested browsers

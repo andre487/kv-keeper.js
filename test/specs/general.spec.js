@@ -192,3 +192,37 @@ describe('KvKeeper.configure()', function () {
         assert.equal(KvKeeper.defaultType, 'auto');
     });
 });
+
+describe('KvKeeper error listeners', function () {
+    afterEach(function () {
+        KvKeeper.removeAllErrorListeners();
+    });
+
+    describe('KvKeeper#addErrorListener', function () {
+        it('should add a listener', function () {
+            function listener() {}
+
+            KvKeeper.addErrorListener(listener);
+
+            assert.include(KvKeeper.getErrorListeners(), listener);
+        });
+
+        it('should throw an error when listener is not a function', function () {
+            assert.throws(function () {
+                KvKeeper.addErrorListener('not a function');
+            }, 'Listener must be a function');
+        });
+    });
+
+    describe('KvKeeper#removeErrorListener', function () {
+        it('should remove a listener', function () {
+            function listener() {}
+
+            KvKeeper.addErrorListener(listener);
+            assert.include(KvKeeper.getErrorListeners(), listener);
+
+            KvKeeper.removeErrorListener(listener);
+            assert.notInclude(KvKeeper.getErrorListeners(), listener);
+        });
+    });
+});

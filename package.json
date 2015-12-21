@@ -9,7 +9,8 @@
     "readme-toc": "doctoc README.md",
     "lint": "eslint .; jscs .",
     "test": "mocha-phantomjs --reporter dot test/specs/test.html && mocha-phantomjs --reporter dot test/specs/test-dist.html",
-    "web-server": "php -S localhost:8000"
+    "web-server": "php -S localhost:8000",
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",

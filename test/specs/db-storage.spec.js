@@ -61,9 +61,12 @@ function testDbOnPositive(label, resetDb, skip) {
     var localDescriber = skip ? describe.skip : describer;
 
     localDescriber('KvKeeper.StorageDB on positive with ' + label, function () {
+        var sandbox;
         var secondDb;
 
         beforeEach(function (done) {
+            sandbox = sinon.sandbox.create();
+
             resetDb(function () {
                 connectToDb(function (db) {
                     secondDb = db;
@@ -73,6 +76,8 @@ function testDbOnPositive(label, resetDb, skip) {
         });
 
         afterEach(function (done) {
+            sandbox.restore();
+
             KvKeeper.getStorage('db', function (err, storage) {
                 assert.notOk(err);
 
@@ -81,6 +86,8 @@ function testDbOnPositive(label, resetDb, skip) {
 
                 resetDb(done);
             });
+
+            KvKeeper.removeAllErrorListeners();
         });
 
         it('should work on supported platform', function (done) {
@@ -89,6 +96,72 @@ function testDbOnPositive(label, resetDb, skip) {
                 assert.instanceOf(storage, KvKeeper.StorageDB);
                 done();
             });
+        });
+
+        describe('open database errors', function () {
+            it('should trigger error when request.onerror', function (done) {
+                stubDbOpen(function (requestStub) {
+                    requestStub.onerror({type: 'Error'});
+                });
+
+                KvKeeper.getStorage('db', function (err) {
+                    assert.ok(err, 'Error is not triggered');
+                    assert.include(err.toString(), '[kv-keeper] DB open request error');
+
+                    done();
+                });
+            });
+
+            it('should call global error handler when request.onerror', function (done) {
+                stubDbOpen(function (requestStub) {
+                    requestStub.onerror({type: 'Error'});
+                });
+
+                KvKeeper.addErrorListener(function (err) {
+                    assert.ok(err, 'Error is not triggered');
+                    assert.include(err.toString(), '[kv-keeper] DB open request error');
+
+                    done();
+                });
+
+                KvKeeper.getStorage('db', function () {});
+            });
+
+            it('should trigger error when request.onblocked', function (done) {
+                stubDbOpen(function (requestStub) {
+                    requestStub.onblocked({type: 'Blocked'});
+                });
+
+                KvKeeper.getStorage('db', function (err) {
+                    assert.ok(err, 'Error is not triggered');
+                    assert.include(err.toString(), '[kv-keeper] DB is blocked');
+
+                    done();
+                });
+            });
+
+            it('should call global error handler when request.onblocked', function (done) {
+                stubDbOpen(function (requestStub) {
+                    requestStub.onblocked({type: 'Blocked'});
+                });
+
+                KvKeeper.addErrorListener(function (err) {
+                    assert.ok(err, 'Error is not triggered');
+                    assert.include(err.toString(), '[kv-keeper] DB is blocked');
+
+                    done();
+                });
+
+                KvKeeper.getStorage('db', function () {});
+            });
+
+            function stubDbOpen(trigger) {
+                sandbox.stub(indexedDB, 'open', function () {
+                    var requestStub = {};
+                    setTimeout(trigger.bind(null, requestStub), 0);
+                    return requestStub;
+                });
+            }
         });
 
         describe('#setItem()', function () {

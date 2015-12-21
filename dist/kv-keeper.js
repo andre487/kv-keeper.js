@@ -16,6 +16,7 @@
     var getObjectKeys = Object.keys;
 
     var instances = {};
+    var errorListeners = [];
 
     /**
      * KvKeeper
@@ -31,6 +32,43 @@
     }
 
     setDefaultConfiguration();
+
+    /**
+     * Add a global error listener
+     * @param {Function} listener
+     */
+    KvKeeper.addErrorListener = function (listener) {
+        if (typeof listener != 'function') {
+            throw new Error('Listener must be a function');
+        }
+        errorListeners.push(listener);
+    };
+
+    /**
+     * Remove an error listener
+     * @param {Function} listener
+     */
+    KvKeeper.removeErrorListener = function (listener) {
+        var index = errorListeners.indexOf(listener);
+        if (index > -1) {
+            errorListeners.splice(index, 1);
+        }
+    };
+
+    /**
+     * Get all error listeners
+     * @returns {Function[]}
+     */
+    KvKeeper.getErrorListeners = function () {
+        return errorListeners;
+    };
+
+    /**
+     * Remove all the error listeners
+     */
+    KvKeeper.removeAllErrorListeners = function () {
+        errorListeners = [];
+    };
 
     function setDefaultConfiguration() {
         KvKeeper.dbVersion = 1;
@@ -79,6 +117,17 @@
         }
     }
 
+    function wrapCallback(callback) {
+        return function wrappedCallback(err, result) {
+            if (err) {
+                for (var i = 0; i < errorListeners.length; i++) {
+                    errorListeners[i](err);
+                }
+            }
+            return callback(err, result);
+        };
+    }
+
     /**
      * Get key-value storage instance
      * @param {String} [type=auto] Storage type: ls, db, auto
@@ -89,6 +138,8 @@
             callback = type;
             type = null;
         }
+
+        callback = wrapCallback(callback);
 
         type = type || KvKeeper.defaultType;
         validateType(type);
@@ -186,6 +237,7 @@
          * @param {KvKeeper.Callback} callback
          */
         that.setItem = function (key, value, callback) {
+            callback = wrapCallback(callback);
             try { // Error example: no space left for store or on device
                 storage.setItem(LS.createKey(key), value);
                 callback(null);
@@ -292,6 +344,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.init = function (callback) {
+            callback = wrapCallback(callback);
+
             openDb(indexedDb, function (err, db) {
                 if (err) {
                     return callback(err);
@@ -316,6 +370,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.setItem = function (key, value, callback) {
+            callback = wrapCallback(callback);
+
             wrapDbRequest(
                 getTransactionStore(TR_READ_WRITE).put({key: key, value: String(value)}),
                 wrapRequestCallback(callback)
@@ -328,6 +384,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getItem = function (key, callback) {
+            callback = wrapCallback(callback);
+
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).get(key),
                 function (err, event) {
@@ -346,6 +404,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.removeItem = function (key, callback) {
+            callback = wrapCallback(callback);
+
             wrapDbRequest(
                 getTransactionStore(TR_READ_WRITE).delete(key),
                 wrapRequestCallback(function (err, event) {
@@ -361,6 +421,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getKeys = function (callback) {
+            callback = wrapCallback(callback);
+
             var keys = [];
 
             wrapDbRequest(
@@ -386,6 +448,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getLength = function (callback) {
+            callback = wrapCallback(callback);
+
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).count(),
                 wrapRequestCallback(callback)
@@ -397,6 +461,8 @@
          * @param {KvKeeper.Callback} callback
          */
         that.clear = function (callback) {
+            callback = wrapCallback(callback);
+
             wrapDbRequest(
                 getTransactionStore(TR_READ_WRITE).clear(),
                 wrapRequestCallback(callback)
@@ -440,6 +506,8 @@
      * @param {KvKeeper.Callback} callback
      */
     function openDb(indexedDb, callback) {
+        callback = wrapCallback(callback);
+
         var req = indexedDb.open(KvKeeper.dbName, KvKeeper.dbVersion);
 
         req.onsuccess = function () {
