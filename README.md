@@ -4,8 +4,8 @@
 [![Code Climate](https://codeclimate.com/github/andre487/kv-keeper.js/badges/gpa.svg)](https://codeclimate.com/github/andre487/kv-keeper.js)
 
 This is a key-value storage for the JS that wraps IndexedDB with fallback to LocalStorage
-  
-  * Very light: 4.2KiB minified and 1.7KiB in gzip.
+
+  * Very light: 4.3KiB minified and 1.8KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
@@ -36,7 +36,7 @@ This is a key-value storage for the JS that wraps IndexedDB with fallback to Loc
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Exports and modularity
-If CommonJS module environment is available, Kv Keeper exports to it. 
+If CommonJS module environment is available, Kv Keeper exports to it.
 Otherwise exports to global variable `KvKeeper`.
 
 ## Basic usage
@@ -88,8 +88,8 @@ You can configure the Kv Keeper with `configure` method:
 
 ```js
 KvKeeper.configure({
-  dbName: 'foo', 
-  storeName: 'bar', 
+  dbName: 'foo',
+  storeName: 'bar',
   defaultType: 'ls'
 })
 ```
@@ -97,12 +97,12 @@ KvKeeper.configure({
 The options are:
   * `dbName` - name of database when IndexedDB is used or part of a prefix in LocalStorage
   * `storeName` - name of store in IndexedDB or part of a prefix in LocalStorage
-  * `defaultType` - default storage type. Can be `db`, `ls` or `auto` 
+  * `defaultType` - default storage type. Can be `db`, `ls` or `auto`
   (try `db` at first and `ls` if `db` is not supported)
 
 ## Advanced usage
-You can get storage with needed driver using `KvKeeper.getStorage`. Storage instances's method are similar 
-to basic methods and have extra `close` method that closes DB and destroys instance 
+You can get storage with needed driver using `KvKeeper.getStorage`. Storage instances's method are similar
+to basic methods and have extra `close` method that closes DB and destroys instance
 
 ```js
 var type = 'db' // Can be auto, db or ls or can absent (not required param)
@@ -114,7 +114,7 @@ KvKeeper.getStorage(type, function (err, storage) {
     if (err) return console.error('Error =/')
 
     console.log("Look! It's foo!", value)
-  })  
+  })
 
   storage.close()
 
@@ -177,7 +177,7 @@ KvKeeper.removeAllErrorListeners()
 Store limits measured in [special tests](/test/limits/limits-test.js). In that tests
 stored symbols count was tested but we accept hypothesis that 1 symbol == 1 byte of content.
 
-Official notes about limits you can find on the 
+Official notes about limits you can find on the
 [MDN](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Browser_storage_limits_and_eviction_criteria).
 
 ### Desktop
@@ -192,9 +192,9 @@ One item limit is between ~9MiB in IE11 and ~128MiB in FireFox 42 and Edge 13.
   * InternetExplorer 10+
   * Edge 13+
   * Safari 9+
-  
+
 #### LocalStorage
-One item limit is between ~2.5MiB (in Chrome 22 and Safari 5-9) and exactly ~5MiB (in FireFox 42). 
+One item limit is between ~2.5MiB (in Chrome 22 and Safari 5-9) and exactly ~5MiB (in FireFox 42).
 So the all storage size.
 
   * YandexBrowser 1.1+
@@ -206,7 +206,7 @@ So the all storage size.
 
 ### Mobile
 #### IndexedDB
-Safe data chunk is 8MiB. After that some mobile browsers can crash. 
+Safe data chunk is 8MiB. After that some mobile browsers can crash.
 
 Android:
   * YandexBrowser 15.6+
@@ -216,18 +216,18 @@ Android:
   * Opera 33+
   * UC Web 10.5+
 
-Safari and WebView (and all browsers) in iOS 8+. 
+Safari and WebView (and all browsers) in iOS 8+.
 
 Internet Explorer 10+ (Windows Phone 8).
 
-**Known issues:** 
-  1. You should not create more then one collection in Kv-Keeper.js database in iOS to avoid 
+**Known issues:**
+  1. You should not create more then one collection in Kv-Keeper.js database in iOS to avoid
      [this bug](http://www.raymondcamden.com/2014/9/25/IndexedDB-on-iOS-8--Broken-Bad).
   2. Safe to store data chunk is about 8MiB. After that threshold some browsers (like Safari on iOS 8) will crash.
-  3. Safari 8 crashes after saving 5 chunks by 5 MiB in a loop. 
+  3. Safari 8 crashes after saving 5 chunks by 5 MiB in a loop.
 
 #### LocalStorage
-One item limit is between ~2.5MiB (Android Browser 4.1.2 and Safari 5-9) and exactly ~5MiB 
+One item limit is between ~2.5MiB (Android Browser 4.1.2 and Safari 5-9) and exactly ~5MiB
 (in FireFox 42 for Android and Internet Explorer 9).
 So the all storage size.
 
@@ -254,7 +254,7 @@ Because of it you should look to tests in couple of browsers using this algorith
   * Run `npm run web-server`
   * Open `http://localhost:8000/test/specs/test.html` ang look at report
   * Then you can generate dist and look at `http://localhost:8000/test/specs/test-dist.html`
-  
+
 ### Tests with database dropping
 These tests are very unstable because of unpredictable browsers behaviour. Because of it these tests are
 disabled by default. You can enable them by adding `tests=all` to query string of tests page. You can do it like this:
@@ -267,4 +267,4 @@ There are some automatic steps usually done before a commit:
   * Prepare dist files (see [Dist](#dist))
   * Update Table of Contents in README.md
 
-So you don't have to do it by yourself. 
+So you don't have to do it by yourself.

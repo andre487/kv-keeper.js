@@ -113,7 +113,7 @@ describe('KvKeeper.StorageLS', function () {
             KvKeeper.getStorage('ls', function (err, storage) {
                 storage.getKeys(function (err, keys) {
                     assert.isNull(err);
-                    assert.sameMembers([key('baz'), key('foo')], keys);
+                    assert.sameMembers(['baz', 'foo'], keys);
                     done();
                 });
             });
