@@ -4,7 +4,7 @@
   "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
   "main": "dist/kv-storage.min.js",
   "scripts": {
-    "deps": "npm install && bower install",
+    "deps": "npm install; bower install",
     "dist": ".scripts/dist.js",
     "readme-toc": "doctoc README.md",
     "lint": "eslint .; jscs .",

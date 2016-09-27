@@ -271,13 +271,13 @@
          */
         that.getKeys = function (callback) {
             var allKeys = getObjectKeys(storage);
-            var namespaceRegExp = new RegExp('^' + KvKeeper.namespace);
+            var nsLength = KvKeeper.namespace.length;
 
             var thatKeys = [];
             for (var i = 0; i < allKeys.length; i++) {
                 var key = allKeys[i];
                 if (isKeeperKey(key)) {
-                    thatKeys.push(key.replace(namespaceRegExp, ''));
+                    thatKeys.push(key.slice(nsLength));
                 }
             }
 
