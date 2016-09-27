@@ -1,7 +1,7 @@
 
 (function (global, exports) {
     'use strict';
-    var LIB_METHODS = ['setItem', 'getItem', 'removeItem', 'getKeys', 'getLength', 'clear'];
+    var LIB_METHODS = ['setItem', 'getItem', 'hasItem', 'removeItem', 'getKeys', 'getLength', 'clear'];
     var CONFIGURABLE_PROPS = ['dbName', 'storeName', 'defaultType'];
 
     var TYPE_DB = 'db';
@@ -276,6 +276,25 @@
                     }
                     var res = event.target.result;
                     callback(null, res ? res.value : null);
+                }
+            );
+        };
+
+        /**
+         * Check if DB has item
+         * @param {String} key
+         * @param {KvKeeper.Callback} callback
+         */
+        that.hasItem = function (key, callback) {
+            callback = wrapCallback(callback);
+
+            wrapDbRequest(
+                getTransactionStore(TR_READ_ONLY).get(key),
+                function (err, event) {
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback(null, Boolean(event.target.result));
                 }
             );
         };
