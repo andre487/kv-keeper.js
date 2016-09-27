@@ -90,13 +90,26 @@ describe('KvKeeper general methods', function () {
         });
     });
 
-    it('should implement set and has operations', function (done) {
+    it('should implement set and get operations', function (done) {
         KvKeeper.setItem('foo', 'bar', function (err) {
             assert.isNull(err);
 
             KvKeeper.getItem('foo', function (err, val) {
                 assert.isNull(err);
                 assert.equal(val, 'bar');
+
+                done();
+            });
+        });
+    });
+
+    it('should implement set and has operations', function (done) {
+        KvKeeper.setItem('foo', 'bar', function (err) {
+            assert.isNull(err);
+
+            KvKeeper.hasItem('foo', function (err, val) {
+                assert.isNull(err);
+                assert.isTrue(val);
 
                 done();
             });

@@ -91,6 +91,32 @@ describe('KvKeeper.StorageLS', function () {
         });
     });
 
+    describe('#hasItem()', function () {
+        it('should return true about existing item', function (done) {
+            localStorage.setItem(key('foo'), 'bar');
+
+            KvKeeper.getStorage('ls', function (err, storage) {
+                storage.hasItem('foo', function (err, val) {
+                    assert.isNull(err);
+                    assert.isTrue(val);
+                    done();
+                });
+            });
+        });
+
+        it('should return false about not existing item', function (done) {
+            localStorage.setItem(key('foo'), 'bar');
+
+            KvKeeper.getStorage('ls', function (err, storage) {
+                storage.hasItem('bar', function (err, val) {
+                    assert.isNull(err);
+                    assert.isFalse(val);
+                    done();
+                });
+            });
+        });
+    });
+
     describe('#removeItem()', function () {
         it('should remove items from LS', function (done) {
             localStorage.setItem(key('foo'), 'bar');

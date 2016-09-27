@@ -195,6 +195,32 @@ function testDbOnPositive(label, resetDb, skip) {
             });
         });
 
+        describe('#hasItem()', function () {
+            it('should return true about existing item', function (done) {
+                getStore().add({key: 'foo', value: 'bar'}).onsuccess = function () {
+                    KvKeeper.getStorage('db', function (err, storage) {
+                        storage.hasItem('foo', function (err, val) {
+                            assert.isNull(err);
+                            assert.isTrue(val);
+                            done();
+                        });
+                    });
+                };
+            });
+
+            it('should return false about not existing item', function (done) {
+                getStore().add({key: 'foo', value: 'bar'}).onsuccess = function () {
+                    KvKeeper.getStorage('db', function (err, storage) {
+                        storage.hasItem('baz', function (err, val) {
+                            assert.isNull(err);
+                            assert.isFalse(val);
+                            done();
+                        });
+                    });
+                };
+            });
+        });
+
         describe('#removeItem()', function () {
             it('should remove items from DB', function (done) {
                 getStore().add({key: 'foo', value: 'bar'}).onsuccess = function () {

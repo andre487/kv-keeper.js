@@ -1,7 +1,7 @@
 
 (function (global, exports) {
     'use strict';
-    var LIB_METHODS = ['setItem', 'getItem', 'removeItem', 'getKeys', 'getLength', 'clear'];
+    var LIB_METHODS = ['setItem', 'getItem', 'hasItem', 'removeItem', 'getKeys', 'getLength', 'clear'];
     var CONFIGURABLE_PROPS = ['dbName', 'storeName', 'defaultType'];
 
     var TYPE_DB = 'db';
@@ -251,6 +251,15 @@
          */
         that.getItem = function (key, callback) {
             callback(null, storage.getItem(LS.createKey(key)));
+        };
+
+        /**
+         * Check if storage has item
+         * @param {String} key
+         * @param {KvKeeper.Callback} callback
+         */
+        that.hasItem = function (key, callback) {
+            callback(null, LS.createKey(key) in storage);
         };
 
         /**

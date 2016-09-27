@@ -5,7 +5,7 @@
 
 This is a key-value storage for the JS that wraps IndexedDB with fallback to LocalStorage
 
-  * Very light: 4.3KiB minified and 1.8KiB in gzip.
+  * Very light: 4.4KiB minified and 1.8KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
@@ -56,6 +56,12 @@ KvKeeper.getItem('foo', function (err, value) {
   if (err) return console.error('Oh no!')
 
   console.log('The foo item value:', value)
+})
+
+KvKeeper.hasItem('foo', function (err, value) {
+  if (err) return console.error('Oh no!')
+
+  console.log('Has item? ', value ? 'Yes' : 'No')
 })
 
 KvKeeper.removeItem('foo', function (err) {
