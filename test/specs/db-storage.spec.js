@@ -58,7 +58,13 @@ testDbOnPositive('drop database', function (callback) {
 }, location.href.indexOf('tests=all') == -1);
 
 function testDbOnPositive(label, resetDb, skip) {
-    var localDescriber = skip ? describe.skip : describer;
+    var localDescriber;
+    if (skip) {
+        localDescriber = describe.skip;
+        label += ' (skipped)';
+    } else {
+        localDescriber = describer;
+    }
 
     localDescriber('KvKeeper.StorageDB on positive with ' + label, function () {
         var sandbox;
