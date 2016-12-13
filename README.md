@@ -5,7 +5,7 @@
 
 This is a key-value storage for the JS that wraps IndexedDB with fallback to LocalStorage
 
-  * Very light: 4.4KiB minified and 1.8KiB in gzip.
+  * Very light: 4.7KiB minified and 1.9KiB in gzip.
   * Can store much data when IndexedDB is available.
   * Simple LS-like interface with Node.js-like callbacks.
 
