@@ -18,6 +18,8 @@
     var instances = {};
     var errorListeners = [];
 
+    function noop() {}
+
     /**
      * KvKeeper
      * @type {KvKeeper.Host}
@@ -32,6 +34,13 @@
     }
 
     setDefaultConfiguration();
+
+    /**
+     * Warm up storage connection
+     */
+    KvKeeper.preconnect = function () {
+        KvKeeper.getStorage(noop);
+    };
 
     /**
      * Add a global error listener
@@ -99,14 +108,16 @@
             validateType(options.defaultType);
         }
 
-        getObjectKeys(options).forEach(function (key) {
-            if (CONFIGURABLE_PROPS.indexOf(key) > -1) {
-                KvKeeper[key] = options[key];
-            } else {
-                setDefaultConfiguration();
-                throw new Error(ERR_PREFIX + key + ' is not configurable');
+        for (var key in options) {
+            if (options.hasOwnProperty(key)) {
+                if (CONFIGURABLE_PROPS.indexOf(key) > -1) {
+                    KvKeeper[key] = options[key];
+                } else {
+                    setDefaultConfiguration();
+                    throw new Error(ERR_PREFIX + key + ' is not configurable');
+                }
             }
-        });
+        }
 
         KvKeeper.namespace = createNamespace();
     };
@@ -118,13 +129,14 @@
     }
 
     function wrapCallback(callback) {
+        var cb = callback || noop;
         return function wrappedCallback(err, result) {
             if (err) {
                 for (var i = 0; i < errorListeners.length; i++) {
                     errorListeners[i](err);
                 }
             }
-            return callback(err, result);
+            return cb(err, result);
         };
     }
 
@@ -134,32 +146,45 @@
      * @param {KvKeeper.Callback} callback
      */
     KvKeeper.getStorage = function (type, callback) {
-        if (typeof type == 'function') {
-            callback = type;
-            type = null;
+        var finalType = type;
+        var finalCallback = callback;
+
+        if (typeof finalType == 'function') {
+            finalCallback = type;
+            finalType = null;
         }
 
-        callback = wrapCallback(callback);
+        finalCallback = wrapCallback(finalCallback);
 
-        type = type || KvKeeper.defaultType;
-        validateType(type);
+        finalType = finalType || KvKeeper.defaultType;
+        validateType(finalType);
 
-        var storage = KvKeeper._getInstance(type);
-        if (storage) {
-            storage.init(callback);
-        } else {
-            var message = type == TYPE_AUTO ? 'No supported stores' : 'No "' + type + '" store support';
-            callback(new Error(ERR_PREFIX + message));
-        }
+        KvKeeper._getInstance(finalType, finalCallback);
     };
 
-    KvKeeper._getInstance = function (type) {
+    KvKeeper._getInstance = function (type, callback) {
         var instance = instances[type];
-        if (!instance) {
-            var data = createInstance(type);
-            instance = instances[data.type] = data.instance;
+        if (instance) {
+            return callback(null, instance);
         }
-        return instance;
+
+        var errorMessage = ERR_PREFIX + (
+                type == TYPE_AUTO ?
+                    'No supported storages' :
+                    'No "' + type + '" storage support'
+            );
+
+        if (instance === null) {
+            return callback(new Error(errorMessage));
+        }
+
+        var data = createInstance(type);
+        if (!data || !data.instance) {
+            return callback(new Error(errorMessage));
+        }
+
+        instance = instances[type] = data.instance;
+        instance.init(callback);
     };
 
     function createInstance(type) {
@@ -195,15 +220,18 @@
         }
 
         if (typeof LS != 'undefined') {
-            return formInstanceData(TYPE_DB, LS.create());
+            return formInstanceData(TYPE_LS, LS.create());
         }
     }
 
     // Add static methods with auto storage
-    LIB_METHODS.forEach(function (method) {
-        KvKeeper[method] = function () {
-            var args = arguments;
-            KvKeeper.getStorage(function (err, storage) {
+    LIB_METHODS.forEach(function setMethod(method) {
+        KvKeeper[method] = function wrappedMethod() {
+            var args = [];
+            for (var i = 0; i < arguments.length; i++) {
+                args.push(arguments[i]);
+            }
+            KvKeeper.getStorage(function storageCallback(err, storage) {
                 if (err) {
                     var callback = args[args.length - 1];
                     return callback(err);
@@ -226,14 +254,14 @@
          * @param {KvKeeper.Callback} callback
          */
         that.init = function (callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             openDb(indexedDb, function (err, db) {
                 if (err) {
-                    return callback(err);
+                    return cb(err);
                 }
                 dbInstance = db;
-                callback(null, that);
+                cb(null, that);
             });
         };
 
@@ -241,8 +269,11 @@
          * Close DB connection
          */
         that.close = function () {
-            dbInstance.close();
-            instances.db = null;
+            if (dbInstance) {
+                dbInstance.close();
+            }
+            delete instances.db;
+            delete instances.auto;
         };
 
         /**
@@ -252,11 +283,11 @@
          * @param {KvKeeper.Callback} callback
          */
         that.setItem = function (key, value, callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_WRITE).put({key: key, value: String(value)}),
-                wrapRequestCallback(callback)
+                wrapRequestCallback(cb)
             );
         };
 
@@ -266,16 +297,16 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getItem = function (key, callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).get(key),
-                function (err, event) {
+                function getItemCallback(err, event) {
                     if (err) {
-                        return callback(err);
+                        return cb(err);
                     }
                     var res = event.target.result;
-                    callback(null, res ? res.value : null);
+                    cb(null, res ? res.value : null);
                 }
             );
         };
@@ -286,15 +317,15 @@
          * @param {KvKeeper.Callback} callback
          */
         that.hasItem = function (key, callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).get(key),
-                function (err, event) {
+                function hasItemCallback(err, event) {
                     if (err) {
-                        return callback(err);
+                        return cb(err);
                     }
-                    callback(null, Boolean(event.target.result));
+                    cb(null, Boolean(event.target.result));
                 }
             );
         };
@@ -305,14 +336,14 @@
          * @param {KvKeeper.Callback} callback
          */
         that.removeItem = function (key, callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_WRITE).delete(key),
-                wrapRequestCallback(function (err, event) {
+                wrapRequestCallback(function removeItemCallback(err, event) {
                     // We need to defer callback for some old browsers
                     // which needs timeout to make removing
-                    setTimeout(callback.bind(null, err, event), 0);
+                    setTimeout(cb.bind(null, err, event), 0);
                 })
             );
         };
@@ -322,15 +353,15 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getKeys = function (callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             var keys = [];
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).openCursor(),
-                function (err, event) {
+                function getKeysCallback(err, event) {
                     if (err) {
-                        return callback(err);
+                        return cb(err);
                     }
 
                     var cursor = event.target.result;
@@ -339,7 +370,7 @@
                         return cursor.continue();
                     }
 
-                    callback(null, keys);
+                    cb(null, keys);
                 }
             );
         };
@@ -349,11 +380,11 @@
          * @param {KvKeeper.Callback} callback
          */
         that.getLength = function (callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_ONLY).count(),
-                wrapRequestCallback(callback)
+                wrapRequestCallback(cb)
             );
         };
 
@@ -362,11 +393,11 @@
          * @param {KvKeeper.Callback} callback
          */
         that.clear = function (callback) {
-            callback = wrapCallback(callback);
+            var cb = wrapCallback(callback);
 
             wrapDbRequest(
                 getTransactionStore(TR_READ_WRITE).clear(),
-                wrapRequestCallback(callback)
+                wrapRequestCallback(cb)
             );
         };
 
@@ -407,7 +438,7 @@
      * @param {KvKeeper.Callback} callback
      */
     function openDb(indexedDb, callback) {
-        callback = wrapCallback(callback);
+        var cb = wrapCallback(callback);
 
         var req = indexedDb.open(KvKeeper.dbName, KvKeeper.dbVersion);
 
@@ -418,13 +449,13 @@
                 db.close(); // Triggers mostly on database deletion
             };
 
-            callback(null, db);
+            cb(null, db);
         };
 
         req.onerror = function (event) {
             var err = new Error(ERR_PREFIX + 'DB open request error');
             err.event = event;
-            callback(err);
+            cb(err);
         };
 
         req.onupgradeneeded = function () {
@@ -434,7 +465,7 @@
         req.onblocked = function (event) {
             var err = new Error(ERR_PREFIX + 'DB is blocked');
             err.event = event;
-            callback(err);
+            cb(err);
         };
     }
 
@@ -462,7 +493,7 @@
      * @returns {Function}
      */
     function wrapRequestCallback(callback) {
-        return function (err, event) {
+        return function requestCallback(err, event) {
             err ?
                 callback(err) :
                 callback(null, event.target.result);

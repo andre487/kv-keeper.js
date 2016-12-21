@@ -35,24 +35,39 @@ describe('KvKeeper.StorageLS', function () {
         });
 
         describe('error', function () {
-            var originalSetItem = localStorage.setItem;
-
             beforeEach(function () {
-                localStorage.setItem = function () {
-                    throw new Error('setItem test error');
-                };
+                function bigRand(iterations) {
+                    var x = '1234567890';
+                    for (var i = 0; i < iterations; i++) {
+                        x += x + x;
+                    }
+                    return x;
+                }
+
+                function fillUntilException(rand, prefix) {
+                    for (var i = 0; i < 1000; i++) {
+                        try {
+                            localStorage.setItem(prefix + i, rand);
+                        } catch (e) {
+                            break;
+                        }
+                    }
+                }
+
+                for (var i = 12; i > 0; i--) {
+                    fillUntilException(bigRand(i), '__' + i + '__');
+                }
             });
 
             afterEach(function () {
-                localStorage.setItem = originalSetItem;
+                localStorage.clear();
             });
 
             it('should handle an LS error', function (done) {
                 KvKeeper.getStorage('ls', function (err, storage) {
                     storage.setItem('foo', 'bar', function (err) {
                         assert.ok(err, 'Error is not handled');
-                        assert.equal(err.message, 'setItem test error');
-
+                        assert.property(err, 'message');
                         done();
                     });
                 });
@@ -68,7 +83,7 @@ describe('KvKeeper.StorageLS', function () {
                         assert.ok(err, 'Error is not handled');
 
                         sinon.assert.calledOnce(listener);
-                        assert.equal(listener.args[0][0].message, 'setItem test error');
+                        assert.property(listener.args[0][0], 'message');
 
                         done();
                     });

@@ -22,20 +22,18 @@ describe('KvKeeper.getStorage()', function () {
     });
 
     it('should call back with storage if supported', function (done) {
-        var fakeStorage = {
-            init: sinon.stub().callsArgWith(0, null, 'StorageInstance')
-        };
-        sandbox.stub(KvKeeper, '_getInstance').returns(fakeStorage);
+        var fakeStorage = {};
+        sandbox.stub(KvKeeper, '_getInstance').callsArgWith(1, null, fakeStorage);
 
         KvKeeper.getStorage(function (err, storage) {
             assert.isNull(err);
-            assert.equal(storage, 'StorageInstance');
+            assert.equal(storage, fakeStorage);
             done();
         });
     });
 
     it('should return an error when current storage is not available', function (done) {
-        sandbox.stub(KvKeeper, '_getInstance');
+        sandbox.stub(KvKeeper, '_getInstance').callsArgWith(1, new Error('No "ls" store support'), undefined);
 
         KvKeeper.getStorage('ls', function (err, storage) {
             assert.isUndefined(storage);
@@ -48,7 +46,7 @@ describe('KvKeeper.getStorage()', function () {
     });
 
     it('should return an error when no storage available', function (done) {
-        sandbox.stub(KvKeeper, '_getInstance');
+        sandbox.stub(KvKeeper, '_getInstance').callsArgWith(1, new Error('No supported stores'), undefined);
 
         KvKeeper.getStorage(function (err, storage) {
             assert.isUndefined(storage);
