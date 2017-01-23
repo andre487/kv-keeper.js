@@ -233,7 +233,9 @@
             }
             KvKeeper.getStorage(function storageCallback(err, storage) {
                 if (err) {
-                    var callback = args[args.length - 1];
+                    var callback = args.filter(function getCallback(arg) {
+                        return typeof arg == 'function';
+                    })[0] || noop;
                     return callback(err);
                 }
                 storage[method].apply(storage, args);
