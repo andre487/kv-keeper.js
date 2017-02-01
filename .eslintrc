@@ -1,5 +1,8 @@
 {
   "extends": "eslint:recommended",
+  "rules": {
+    "no-empty": 0
+  },
   "env": {
     "node": true,
     "browser": true
