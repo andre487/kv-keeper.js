@@ -1,6 +1,6 @@
 {
   "name": "kv-keeper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
   "main": "dist/kv-storage.min.js",
   "scripts": {
