@@ -1,5 +1,5 @@
 
-(function (global, exports) {
+(function (global) {
     'use strict';
     var LIB_METHODS = ['setItem', 'getItem', 'hasItem', 'removeItem', 'getKeys', 'getLength', 'clear'];
     var CONFIGURABLE_PROPS = ['dbName', 'storeName', 'defaultType'];
@@ -24,14 +24,31 @@
      * KvKeeper
      * @type {KvKeeper.Host}
      */
-    var KvKeeper;
+    var KvKeeper = {};
 
-    // Exporting
-    if (exports) { // CommonJS
-        KvKeeper = exports;
-    } else { // Globals
-        global.KvKeeper = KvKeeper = {};
+    /* ~EXPORTING START~ */
+    var defineAsGlobal = true;
+
+    // as CommonJS
+    if (typeof exports === 'object') {
+        exports = KvKeeper;
+        defineAsGlobal = false;
     }
+
+    /* global modules */
+    // as YModules module
+    if (global.modules && modules.define && modules.require) {
+        modules.define('kv-keeper', function (provide) {
+            provide(KvKeeper);
+        });
+        defineAsGlobal = false;
+    }
+
+    // as global
+    if (defineAsGlobal) {
+        global.KvKeeper = KvKeeper;
+    }
+    /* ~EXPORTING END~ */
 
     setDefaultConfiguration();
 
@@ -381,4 +398,4 @@
         return storage ? new LS(storage) : null;
     };
     
-})(self, typeof exports != 'undefined' && exports);
+})(self);

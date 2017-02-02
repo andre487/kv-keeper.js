@@ -36,7 +36,7 @@ This is a key-value storage for the JS that wraps IndexedDB with fallback to Loc
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Exports and modularity
-If CommonJS module environment is available, Kv Keeper exports to it.
+If [YModules](https://github.com/ymaps/modules) or [CommonJS](http://www.commonjs.org/specs/modules/1.0/) module environment is available, Kv Keeper exports to it.
 Otherwise exports to global variable `KvKeeper`.
 
 ## Basic usage
