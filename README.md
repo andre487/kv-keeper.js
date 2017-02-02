@@ -49,7 +49,7 @@ var KvKeeper = require('kv-keeper.js')
 KvKeeper.setItem('foo', 'bar', function (err) {
   if (err) return console.error("Can't save the foo item")
 
-  console.error('The foo item is successfully stored!')
+  console.log('The foo item is successfully stored!')
 })
 
 KvKeeper.getItem('foo', function (err, value) {
