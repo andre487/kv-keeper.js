@@ -1,8 +1,7 @@
 {
-  "preset": "yandex",
+  "preset": "loris",
   "excludeFiles": [
     "node_modules",
-    "bower_components",
     "dist/*"
   ]
 }

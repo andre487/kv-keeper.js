@@ -1,5 +1,5 @@
 before_install:
-  - npm run deps
+  - npm install
 script: npm run lint && npm test
 language: node_js
 node_js:
