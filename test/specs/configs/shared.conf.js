@@ -10,8 +10,8 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             // Need to include KvKeeper bundle in child configs
-            '../../test/indexed-db-stub.js',
-            '../../test/specs/*.spec.js'
+            '../../../test/indexed-db-stub.js',
+            '../../../test/specs/*.spec.js'
         ],
 
         // list of files to exclude

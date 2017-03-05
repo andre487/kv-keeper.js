@@ -8,8 +8,8 @@
     "dist": ".scripts/dist.js",
     "readme-toc": "doctoc README.md",
     "lint": "eslint .; jscs .",
-    "test:lib": "karma start test/configs/headless-lib.conf.js",
-    "test:dist": "karma start test/configs/headless-dist.conf.js",
+    "test:lib": "karma start test/specs/configs/headless-lib.conf.js",
+    "test:dist": "karma start test/specs/configs/headless-dist.conf.js",
     "test": "npm run test:lib && npm run test:dist",
     "web-server": "php -S localhost:8000",
     "postinstall": "bower install"
