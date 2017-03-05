@@ -43,8 +43,10 @@
     "karma-mocha-reporter": "^2.2.2",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-sinon": "^1.0.5",
+    "lodash": "^3.10.1",
     "mocha": "^3.2.0",
     "phantomjs-prebuilt": "^2.1.14",
+    "q": "^1.4.1",
     "shelljs": "^0.5.3",
     "sinon": "^1.17.7",
     "uglify-js": "^2.6.1"

@@ -6,7 +6,7 @@
     "andre487 <andrey.prokopyuk@gmail.com>"
   ],
   "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
-  "main": "dist/kv-keeper.min.js",
+  "main": "dist/kv-keeper.js",
   "moduleType": [
     "node"
   ],
@@ -20,10 +20,5 @@
     "**/.*",
     "package.json",
     "test"
-  ],
-  "devDependencies": {
-    "lodash": "~3.10.1",
-    "benchmark": "~1.0.0",
-    "q": "1.0.1"
-  }
+  ]
 }
