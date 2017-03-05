@@ -4,15 +4,13 @@
   "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
   "main": "dist/kv-storage.min.js",
   "scripts": {
-    "deps": "npm install; bower install",
     "dist": ".scripts/dist.js",
     "readme-toc": "doctoc README.md",
     "lint": "eslint .; jscs .",
     "test:lib": "karma start test/specs/configs/headless-lib.conf.js",
     "test:dist": "karma start test/specs/configs/headless-dist.conf.js",
     "test": "npm run test:lib && npm run test:dist",
-    "web-server": "php -S localhost:8000",
-    "postinstall": "bower install"
+    "web-server": "php -S localhost:8000"
   },
   "repository": {
     "type": "git",
