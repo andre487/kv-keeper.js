@@ -26,6 +26,8 @@ module.exports = function (config) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: ['mocha'],
 
+        listenAddress: 'localhost',
+
         // web server port
         port: 9876,
 
@@ -43,6 +45,9 @@ module.exports = function (config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [],
+
+        browserDisconnectTimeout: 5000,
+        browserDisconnectTolerance: 5,
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
