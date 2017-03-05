@@ -1,12 +1,12 @@
 {
   "name": "kv-keeper.js",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "homepage": "https://github.com/andre487/kv-keeper.js",
   "authors": [
     "andre487 <andrey.prokopyuk@gmail.com>"
   ],
   "description": "Key-value storage for JS that wraps IndexedDB with fallback to LocalStorage",
-  "main": "dist/kv-keeper.js",
+  "main": "dist/kv-keeper.min.js",
   "moduleType": [
     "node"
   ],

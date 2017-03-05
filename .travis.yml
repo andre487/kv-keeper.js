@@ -3,4 +3,4 @@ before_install:
 script: npm run lint && npm test
 language: node_js
 node_js:
-  - '0.12'
+  - '6'
