@@ -55,7 +55,7 @@ testDbOnPositive('drop database', function (callback) {
     req.onblocked = req.onerror = function (event) {
         throw new Error('Drop DB error! ' + event.type);
     };
-}, location.href.indexOf('skip-drop=1') == -1);
+}, location.href.indexOf('skip-drop=1') != -1);
 
 function testDbOnPositive(label, resetDb, skip) {
     var localDescriber;
